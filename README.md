@@ -1,3 +1,3 @@
 ## Ohturyhmä Mandoliini
 
-C&#35;mandoliini @ ircnet
+&#35;mandoliini @ ircnet
