@@ -104,8 +104,8 @@ public class BibCli {
         while (next) {
             BibTeXEntry entry = readBookRef();
             if (entry != null) {
-                System.out.println("You entered:");
-                BibUtil.printBookEntry(entry);
+                io.print("You entered:");
+                BibUtil.printBookEntry(this.io, entry);
                 if (!continuePrompt("Is this OK?")) {
                     System.out.println("Not adding entry.");
                 } else {
@@ -122,7 +122,7 @@ public class BibCli {
             }
         }
         if (!changed) {
-            System.out.println("Nothing changed, exiting.");
+            io.print("Nothing changed, exiting.");
         }
     }
 }
