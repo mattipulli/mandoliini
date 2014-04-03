@@ -23,5 +23,15 @@ public class ConsoleIO {
         return scanner.nextLine();
     }
     
+    public boolean readYesNo(String prompt) {
+        String ans;
+        while(true) {
+            System.out.print(prompt+" [y/n]:");
+            ans = scanner.nextLine();
+            if(ans.equalsIgnoreCase("y")) return true;
+            if(ans.equalsIgnoreCase("n")) return false;
+        }
+    }
+    
 }
 

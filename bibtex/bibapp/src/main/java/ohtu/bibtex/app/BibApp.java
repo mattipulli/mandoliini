@@ -1,5 +1,6 @@
 package ohtu.bibtex.app;
 
+import java.io.File;
 import org.jbibtex.BibTeXDatabase;
 import org.jbibtex.BibTeXEntry;
 
@@ -9,13 +10,32 @@ import org.jbibtex.BibTeXEntry;
  */
 public class BibApp {
 
+    // viitetietokantatiedosto
+    private static String dbpath = "refdb.bibtex";
+    
     public static void main(String[] args) {
+        boolean next = true;
+        BibTeXDatabase database = null;
         BibCli cli = new BibCli();
-        org.jbibtex.BibTeXDatabase database = new BibTeXDatabase();
-        BibTeXEntry entry = cli.readBookRef();
-        if (entry != null) {
-            database.addObject(entry);
-            cli.printDatabase(database);
+        File f = new File(dbpath);
+        
+        // ladataan olemassaoleva tietokanta tai luodaan uusi
+        if(f.exists()) {
+            database = cli.readDatabase(dbpath);
+        } else {
+            database = new BibTeXDatabase();
+        }
+
+        // kysytään silmukassa viitteitä
+        while (next) {
+            BibTeXEntry entry = cli.readBookRef();
+            if (entry != null) {
+                database.addObject(entry);
+            }
+            next = cli.continuePrompt("Add another entry?");
+        }
+        if(!database.getObjects().isEmpty()) {
+            cli.saveDatabase(database, dbpath);
         }
     }
 }

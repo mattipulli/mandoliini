@@ -1,6 +1,10 @@
 package ohtu.bibtex.app;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.logging.Level;
@@ -8,8 +12,11 @@ import java.util.logging.Logger;
 import org.jbibtex.BibTeXDatabase;
 import org.jbibtex.BibTeXEntry;
 import static org.jbibtex.BibTeXEntry.*;
+import org.jbibtex.BibTeXParser;
 import org.jbibtex.Key;
+import org.jbibtex.ParseException;
 import org.jbibtex.StringValue;
+import org.jbibtex.TokenMgrError;
 
 
 /**
@@ -23,9 +30,13 @@ public class BibCli {
         io = new ConsoleIO();
     }
     
+    public boolean continuePrompt (String prompt) {
+        return io.readYesNo(prompt);
+    }
+    
     /**
      * Tulostaa viitetietokannan (testausta varten)
-     * @param db 
+     * @param db viitetietokanta
      */
     public void printDatabase (BibTeXDatabase db) {
         Writer writer = new StringWriter();
@@ -39,7 +50,54 @@ public class BibCli {
     }
     
     /**
+     * Lukee tietokannan tiedostosta
+     * @param filename tiedostonimi
+     * @return luettu viitetietokanta
+     */
+    public BibTeXDatabase readDatabase(String filename) {
+        Reader reader = null;
+        BibTeXDatabase database = null;
+        try {
+            reader = new FileReader(filename);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "File not found: "+filename, ex);
+        }
+        if (reader != null) {
+            BibTeXParser bibtexParser = new org.jbibtex.BibTeXParser();
+            try {
+                database = bibtexParser.parse(reader);
+            } catch (ParseException ex) {
+                Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "Failed to parse database", ex);
+            } catch (TokenMgrError ex) {
+                Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "Token error", ex);
+            }
+        }
+        return database;
+    }
+    
+    /**
+     * Tallenna viitetietokanta tiedostoon
+     * @param db viitetietokanta
+     * @param filename tiedostonimi
+     */
+    public void saveDatabase (BibTeXDatabase db, String filename) {
+        Writer writer = null;
+        try {
+            writer = new FileWriter(filename, false);
+        } catch (IOException ex) {
+            Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "Failed to open "+filename+" for writing", ex);
+        }
+        org.jbibtex.BibTeXFormatter bibtexFormatter = new org.jbibtex.BibTeXFormatter();
+        try {
+            bibtexFormatter.format(db, writer);
+        } catch (IOException ex) {
+            Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "Failed to write database", ex);
+        }
+    }
+    
+    /**
      * Kirjaviitteen luku
+     * @return Viiteobjekti
     */
     public org.jbibtex.BibTeXEntry readBookRef () {
         // (Wikipedia, BibTeX book entry) "Required fields: author/editor, title, publisher, year"
