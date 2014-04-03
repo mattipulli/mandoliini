@@ -128,19 +128,20 @@ public class BibCli {
             return null;
         }
         StringValue author = new StringValue(io.readLine("Author:"), StringValue.Style.BRACED);
-        if (author.toString().equals("")) {
+        if (author.toUserString().equals("")) {
             return null;
         }
+        
         StringValue title = new StringValue(io.readLine("Title:"), StringValue.Style.BRACED);
-        if (title.toString().equals("")) {
+        if (title.toUserString().equals("")) {
             return null;
         }
         StringValue publisher = new StringValue(io.readLine("Publisher:"), StringValue.Style.BRACED);
-        if (publisher.toString().equals("")) {
+        if (publisher.toUserString().equals("")) {
             return null;
         }
         StringValue year = new StringValue(io.readLine("Year:"), StringValue.Style.BRACED);
-        if (year.toString().equals("")) {
+        if (year.toUserString().equals("")) {
             return null;
         }
         entry = new BibTeXEntry(new Key("Book"), new Key(cite));
