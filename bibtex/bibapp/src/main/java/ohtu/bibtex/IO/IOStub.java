@@ -1,6 +1,7 @@
 package ohtu.bibtex.IO;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -38,6 +39,10 @@ public class IOStub implements IO {
 		}
 		return "";
 	}
+        
+        public List<String> getPrints(){
+            return this.prints;
+        }
 
 	@Override
 	public boolean readYesNo(String prompt) {

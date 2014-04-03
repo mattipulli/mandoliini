@@ -20,9 +20,9 @@ public class BibCli {
         io = new ConsoleIO();
     }
 
-	public BibCli(IO io) {
-		this.io = io;
-	}
+    public BibCli(IO io) {
+        this.io = io;
+    }
 
     /**
      * Yes/No prompt
