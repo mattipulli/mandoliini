@@ -33,6 +33,7 @@ public class BibCli {
 
     /**
      * Kyllä/Ei -kehote
+     *
      * @param prompt kehoteteksti
      * @return totuusarvo
      */
@@ -106,6 +107,7 @@ public class BibCli {
 
     /**
      * Pyydä varmistus tiedostonimeen tai uusi nimi
+     *
      * @param fn oletustiedostonimi
      * @return käytettävä tiedostonimi
      */
@@ -141,7 +143,7 @@ public class BibCli {
         if (author.toUserString().equals("")) {
             return null;
         }
-        
+
         StringValue title = new StringValue(io.readLine("Title:"), StringValue.Style.BRACED);
         if (title.toUserString().equals("")) {
             return null;

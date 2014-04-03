@@ -31,8 +31,14 @@ public class BibApp {
         while (next) {
             BibTeXEntry entry = cli.readBookRef();
             if (entry != null) {
-                database.addObject(entry);
-                changed = true;
+                System.out.println("You entered:");
+                BibUtil.printBookEntry(entry);
+                if (!cli.continuePrompt("Is this OK?")) {
+                    System.out.println("Not adding entry.");
+                } else {
+                    database.addObject(entry);
+                    changed = true;
+                }
             }
             next = cli.continuePrompt("Add another entry?");
         }
@@ -42,6 +48,8 @@ public class BibApp {
                 cli.saveDatabase(database, cli.confirmFilename(dbpath));
             }
         }
-        if(!changed) System.out.println("Nothing changed, exiting.");
+        if (!changed) {
+            System.out.println("Nothing changed, exiting.");
+        }
     }
 }

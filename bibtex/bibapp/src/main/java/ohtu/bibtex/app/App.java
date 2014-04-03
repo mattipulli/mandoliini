@@ -34,11 +34,11 @@ public class App {
                 // iteroidaan luettu viitetietokanta
                 Collection<org.jbibtex.BibTeXEntry> entries = entryMap.values();
                 for (org.jbibtex.BibTeXEntry entry : entries) {
-                    
+
                     // luetaan viitteestä title ja author
                     org.jbibtex.Value title = entry.getField(org.jbibtex.BibTeXEntry.KEY_TITLE);
                     org.jbibtex.Value author = entry.getField(org.jbibtex.BibTeXEntry.KEY_AUTHOR);
-                    
+
                     if (title == null || author == null) {
                         continue;
                     }
