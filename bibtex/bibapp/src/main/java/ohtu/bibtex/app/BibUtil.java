@@ -8,6 +8,10 @@ import org.jbibtex.BibTeXEntry;
  */
 public class BibUtil {
 
+    /**
+     * Pretty print an inputted entry for user confirmation
+     * @param entry Book reference entry to print
+     */
     public static void printBookEntry(BibTeXEntry entry) {
         String title = entry.getField(BibTeXEntry.KEY_TITLE).toUserString();
         String author = entry.getField(BibTeXEntry.KEY_AUTHOR).toUserString();
