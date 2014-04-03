@@ -18,27 +18,29 @@ import org.jbibtex.ParseException;
 import org.jbibtex.StringValue;
 import org.jbibtex.TokenMgrError;
 
-
 /**
  * Yksinkertainen komentorivikäli
+ *
  * @author Jouko Strömmer
  */
 public class BibCli {
+
     private final ConsoleIO io;
-    
-    public BibCli () {
+
+    public BibCli() {
         io = new ConsoleIO();
     }
-    
-    public boolean continuePrompt (String prompt) {
+
+    public boolean continuePrompt(String prompt) {
         return io.readYesNo(prompt);
     }
-    
+
     /**
      * Tulostaa viitetietokannan (testausta varten)
+     *
      * @param db viitetietokanta
      */
-    public void printDatabase (BibTeXDatabase db) {
+    public void printDatabase(BibTeXDatabase db) {
         Writer writer = new StringWriter();
         org.jbibtex.BibTeXFormatter bibtexFormatter = new org.jbibtex.BibTeXFormatter();
         try {
@@ -48,9 +50,10 @@ public class BibCli {
         }
         io.print(writer.toString());
     }
-    
+
     /**
      * Lukee tietokannan tiedostosta
+     *
      * @param filename tiedostonimi
      * @return luettu viitetietokanta
      */
@@ -60,7 +63,7 @@ public class BibCli {
         try {
             reader = new FileReader(filename);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "File not found: "+filename, ex);
+            Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "File not found: " + filename, ex);
         }
         if (reader != null) {
             BibTeXParser bibtexParser = new org.jbibtex.BibTeXParser();
@@ -74,18 +77,19 @@ public class BibCli {
         }
         return database;
     }
-    
+
     /**
      * Tallenna viitetietokanta tiedostoon
+     *
      * @param db viitetietokanta
      * @param filename tiedostonimi
      */
-    public void saveDatabase (BibTeXDatabase db, String filename) {
+    public void saveDatabase(BibTeXDatabase db, String filename) {
         Writer writer = null;
         try {
             writer = new FileWriter(filename, false);
         } catch (IOException ex) {
-            Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "Failed to open "+filename+" for writing", ex);
+            Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "Failed to open " + filename + " for writing", ex);
         }
         org.jbibtex.BibTeXFormatter bibtexFormatter = new org.jbibtex.BibTeXFormatter();
         try {
@@ -94,26 +98,51 @@ public class BibCli {
             Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "Failed to write database", ex);
         }
     }
-    
+
+    public String confirmFilename(String fn) {
+        String filename;
+        if (continuePrompt("Use file " + fn + " ?")) {
+            return fn;
+        } else {
+            while (true) {
+                filename = io.readLine("Enter new filename:");
+                if (!filename.equals("")) {
+                    return filename;
+                }
+            }
+        }
+    }
+
     /**
      * Kirjaviitteen luku
+     *
      * @return Viiteobjekti
-    */
-    public org.jbibtex.BibTeXEntry readBookRef () {
+     */
+    public org.jbibtex.BibTeXEntry readBookRef() {
         // (Wikipedia, BibTeX book entry) "Required fields: author/editor, title, publisher, year"
         BibTeXEntry entry = null;
         io.print("Adding Book reference - required fields: author, title, publisher, year");
         io.print("Entering an empty field cancels.");
         String cite = io.readLine("Cite key:");
-        if(cite.equals("")) return null;
+        if (cite.equals("")) {
+            return null;
+        }
         StringValue author = new StringValue(io.readLine("Author:"), StringValue.Style.BRACED);
-        if(author.toString().equals("")) return null;
+        if (author.toString().equals("")) {
+            return null;
+        }
         StringValue title = new StringValue(io.readLine("Title:"), StringValue.Style.BRACED);
-        if(title.toString().equals("")) return null;
+        if (title.toString().equals("")) {
+            return null;
+        }
         StringValue publisher = new StringValue(io.readLine("Publisher:"), StringValue.Style.BRACED);
-        if(publisher.toString().equals("")) return null;
+        if (publisher.toString().equals("")) {
+            return null;
+        }
         StringValue year = new StringValue(io.readLine("Year:"), StringValue.Style.BRACED);
-        if(year.toString().equals("")) return null;
+        if (year.toString().equals("")) {
+            return null;
+        }
         entry = new BibTeXEntry(new Key("Book"), new Key(cite));
         entry.addField(KEY_AUTHOR, author);
         entry.addField(KEY_TITLE, title);
@@ -121,5 +150,5 @@ public class BibCli {
         entry.addField(KEY_YEAR, year);
         return entry;
     }
-    
+
 }

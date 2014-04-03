@@ -12,15 +12,15 @@ public class BibApp {
 
     // viitetietokantatiedosto
     private static String dbpath = "refdb.bibtex";
-    
+
     public static void main(String[] args) {
         boolean next = true;
         BibTeXDatabase database = null;
         BibCli cli = new BibCli();
         File f = new File(dbpath);
-        
+
         // ladataan olemassaoleva tietokanta tai luodaan uusi
-        if(f.exists()) {
+        if (f.exists()) {
             database = cli.readDatabase(dbpath);
         } else {
             database = new BibTeXDatabase();
@@ -34,8 +34,11 @@ public class BibApp {
             }
             next = cli.continuePrompt("Add another entry?");
         }
-        if(!database.getObjects().isEmpty()) {
-            cli.saveDatabase(database, dbpath);
+
+        if (!database.getObjects().isEmpty()) {
+            if (cli.continuePrompt("Save changes?")) {
+                cli.saveDatabase(database, cli.confirmFilename(dbpath));
+            }
         }
     }
 }
