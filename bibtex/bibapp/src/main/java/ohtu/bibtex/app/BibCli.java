@@ -85,7 +85,7 @@ public class BibCli {
     }
 
     /**
-     * Write reference database to a file
+     * Write reference database to a file in BibTeX format
      *
      * @param db reference database
      * @param filename filename to write to
