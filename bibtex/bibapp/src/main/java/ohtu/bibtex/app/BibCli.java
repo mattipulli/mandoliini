@@ -31,6 +31,11 @@ public class BibCli {
         io = new ConsoleIO();
     }
 
+    /**
+     * Kyllä/Ei -kehote
+     * @param prompt kehoteteksti
+     * @return totuusarvo
+     */
     public boolean continuePrompt(String prompt) {
         return io.readYesNo(prompt);
     }
@@ -99,6 +104,11 @@ public class BibCli {
         }
     }
 
+    /**
+     * Pyydä varmistus tiedostonimeen tai uusi nimi
+     * @param fn oletustiedostonimi
+     * @return käytettävä tiedostonimi
+     */
     public String confirmFilename(String fn) {
         String filename;
         if (continuePrompt("Use file " + fn + " ?")) {

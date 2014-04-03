@@ -10,8 +10,8 @@ import org.jbibtex.BibTeXEntry;
  */
 public class BibApp {
 
-    // viitetietokantatiedosto
-    private static String dbpath = "refdb.bibtex";
+    // viitetietokantatiedosto, luetaan käynnistyksessä
+    private final static String dbpath = "refdb.bibtex";
 
     public static void main(String[] args) {
         boolean next = true;
