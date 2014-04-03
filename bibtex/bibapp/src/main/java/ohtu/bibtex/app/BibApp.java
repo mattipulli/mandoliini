@@ -15,6 +15,7 @@ public class BibApp {
 
     public static void main(String[] args) {
         boolean next = true;
+        boolean changed = false;
         BibTeXDatabase database = null;
         BibCli cli = new BibCli();
         File f = new File(dbpath);
@@ -31,14 +32,16 @@ public class BibApp {
             BibTeXEntry entry = cli.readBookRef();
             if (entry != null) {
                 database.addObject(entry);
+                changed = true;
             }
             next = cli.continuePrompt("Add another entry?");
         }
 
-        if (!database.getObjects().isEmpty()) {
+        if (!database.getObjects().isEmpty() && changed) {
             if (cli.continuePrompt("Save changes?")) {
                 cli.saveDatabase(database, cli.confirmFilename(dbpath));
             }
         }
+        if(!changed) System.out.println("Nothing changed, exiting.");
     }
 }
