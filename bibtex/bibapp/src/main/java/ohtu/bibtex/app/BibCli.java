@@ -19,9 +19,9 @@ import org.jbibtex.StringValue;
 import org.jbibtex.TokenMgrError;
 
 /**
- * Yksinkertainen komentorivikäli
+ * Simple text interface for adding BibTeX references
  *
- * @author Jouko Strömmer
+ * 
  */
 public class BibCli {
 
@@ -32,19 +32,19 @@ public class BibCli {
     }
 
     /**
-     * Kyllä/Ei -kehote
+     * Yes/No prompt
      *
-     * @param prompt kehoteteksti
-     * @return totuusarvo
+     * @param prompt prompt text
+     * @return answer, true means Yes
      */
     public boolean continuePrompt(String prompt) {
         return io.readYesNo(prompt);
     }
 
     /**
-     * Tulostaa viitetietokannan (testausta varten)
+     * Print out the reference database in BibTeX format (for testing)
      *
-     * @param db viitetietokanta
+     * @param db reference database
      */
     public void printDatabase(BibTeXDatabase db) {
         Writer writer = new StringWriter();
@@ -58,10 +58,10 @@ public class BibCli {
     }
 
     /**
-     * Lukee tietokannan tiedostosta
+     * Read database from BibTeX file
      *
-     * @param filename tiedostonimi
-     * @return luettu viitetietokanta
+     * @param filename database filename
+     * @return parsed database
      */
     public BibTeXDatabase readDatabase(String filename) {
         Reader reader = null;
@@ -85,10 +85,10 @@ public class BibCli {
     }
 
     /**
-     * Tallenna viitetietokanta tiedostoon
+     * Write reference database to a file
      *
-     * @param db viitetietokanta
-     * @param filename tiedostonimi
+     * @param db reference database
+     * @param filename filename to write to
      */
     public void saveDatabase(BibTeXDatabase db, String filename) {
         Writer writer = null;
@@ -106,10 +106,10 @@ public class BibCli {
     }
 
     /**
-     * Pyydä varmistus tiedostonimeen tai uusi nimi
+     * Ask confirmation for filename
      *
-     * @param fn oletustiedostonimi
-     * @return käytettävä tiedostonimi
+     * @param fn filename to ask about
+     * @return chosen filename
      */
     public String confirmFilename(String fn) {
         String filename;
@@ -126,9 +126,9 @@ public class BibCli {
     }
 
     /**
-     * Kirjaviitteen luku
+     * Read in values for creating a Book reference
      *
-     * @return Viiteobjekti
+     * @return reference entry
      */
     public org.jbibtex.BibTeXEntry readBookRef() {
         // (Wikipedia, BibTeX book entry) "Required fields: author/editor, title, publisher, year"

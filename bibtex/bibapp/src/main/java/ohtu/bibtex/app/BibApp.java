@@ -5,12 +5,12 @@ import org.jbibtex.BibTeXDatabase;
 import org.jbibtex.BibTeXEntry;
 
 /**
- * Minimalistinen viitteen syöttämisen testiohjelma
+ * Minimalist program for inputting BibTeX references into a file
  *
  */
 public class BibApp {
 
-    // viitetietokantatiedosto, luetaan käynnistyksessä
+    // default reference database filename, will be read if exists
     private final static String dbpath = "refdb.bibtex";
 
     public static void main(String[] args) {
@@ -20,14 +20,14 @@ public class BibApp {
         BibCli cli = new BibCli();
         File f = new File(dbpath);
 
-        // ladataan olemassaoleva tietokanta tai luodaan uusi
+        // load existing database from file or create an empty one
         if (f.exists()) {
             database = cli.readDatabase(dbpath);
         } else {
             database = new BibTeXDatabase();
         }
 
-        // kysytään silmukassa viitteitä
+        // loop and prompt user to add a reference
         while (next) {
             BibTeXEntry entry = cli.readBookRef();
             if (entry != null) {

@@ -3,8 +3,8 @@ package ohtu.bibtex.app;
 import org.jbibtex.BibTeXEntry;
 
 /**
- *
- * @author Jouko Strömmer
+ * Some simple utility methods
+ * 
  */
 public class BibUtil {
 
