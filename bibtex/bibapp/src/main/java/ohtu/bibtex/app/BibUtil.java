@@ -4,7 +4,7 @@ import org.jbibtex.BibTeXEntry;
 
 /**
  * Some simple utility methods
- * 
+ *
  */
 public class BibUtil {
 

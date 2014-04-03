@@ -3,8 +3,7 @@ package ohtu.bibtex.app;
 import java.util.Scanner;
 
 /**
- *
- * @author Jouko Strömmer
+ * Some basic Console I/O methods
  */
 public class ConsoleIO {
     private final Scanner scanner = new Scanner(System.in);
@@ -26,7 +25,7 @@ public class ConsoleIO {
     public boolean readYesNo(String prompt) {
         String ans;
         while(true) {
-            System.out.print(prompt+" [y/n]:");
+            System.out.print(prompt+" [y/n]: ");
             ans = scanner.nextLine();
             if(ans.equalsIgnoreCase("y")) return true;
             if(ans.equalsIgnoreCase("n")) return false;

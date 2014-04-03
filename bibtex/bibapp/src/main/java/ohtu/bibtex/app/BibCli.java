@@ -1,27 +1,14 @@
 package ohtu.bibtex.app;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.jbibtex.BibTeXDatabase;
 import org.jbibtex.BibTeXEntry;
 import static org.jbibtex.BibTeXEntry.*;
-import org.jbibtex.BibTeXParser;
 import org.jbibtex.Key;
-import org.jbibtex.ParseException;
 import org.jbibtex.StringValue;
-import org.jbibtex.TokenMgrError;
 
 /**
  * Simple text interface for adding BibTeX references
  *
- * 
+ *
  */
 public class BibCli {
 
@@ -39,70 +26,6 @@ public class BibCli {
      */
     public boolean continuePrompt(String prompt) {
         return io.readYesNo(prompt);
-    }
-
-    /**
-     * Print out the reference database in BibTeX format (for testing)
-     *
-     * @param db reference database
-     */
-    public void printDatabase(BibTeXDatabase db) {
-        Writer writer = new StringWriter();
-        org.jbibtex.BibTeXFormatter bibtexFormatter = new org.jbibtex.BibTeXFormatter();
-        try {
-            bibtexFormatter.format(db, writer);
-        } catch (IOException ex) {
-            Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "Failed to print database", ex);
-        }
-        io.print(writer.toString());
-    }
-
-    /**
-     * Read database from BibTeX file
-     *
-     * @param filename database filename
-     * @return parsed database
-     */
-    public BibTeXDatabase readDatabase(String filename) {
-        Reader reader = null;
-        BibTeXDatabase database = null;
-        try {
-            reader = new FileReader(filename);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "File not found: " + filename, ex);
-        }
-        if (reader != null) {
-            BibTeXParser bibtexParser = new org.jbibtex.BibTeXParser();
-            try {
-                database = bibtexParser.parse(reader);
-            } catch (ParseException ex) {
-                Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "Failed to parse database", ex);
-            } catch (TokenMgrError ex) {
-                Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "Token error", ex);
-            }
-        }
-        return database;
-    }
-
-    /**
-     * Write reference database to a file in BibTeX format
-     *
-     * @param db reference database
-     * @param filename filename to write to
-     */
-    public void saveDatabase(BibTeXDatabase db, String filename) {
-        Writer writer = null;
-        try {
-            writer = new FileWriter(filename, false);
-        } catch (IOException ex) {
-            Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "Failed to open " + filename + " for writing", ex);
-        }
-        org.jbibtex.BibTeXFormatter bibtexFormatter = new org.jbibtex.BibTeXFormatter();
-        try {
-            bibtexFormatter.format(db, writer);
-        } catch (IOException ex) {
-            Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "Failed to write database", ex);
-        }
     }
 
     /**
@@ -164,4 +87,36 @@ public class BibCli {
         return entry;
     }
 
+    /**
+     * Ask user to input Book references in a loop
+     *
+     * @param db database to store entries in
+     */
+    public void askEntries(BibDatabase db) {
+        boolean next = true;
+        boolean changed = false;
+        while (next) {
+            BibTeXEntry entry = readBookRef();
+            if (entry != null) {
+                System.out.println("You entered:");
+                BibUtil.printBookEntry(entry);
+                if (!continuePrompt("Is this OK?")) {
+                    System.out.println("Not adding entry.");
+                } else {
+                    db.getDatabase().addObject(entry);
+                    changed = true;
+                }
+            }
+            next = continuePrompt("Add another entry?");
+        }
+
+        if (!db.getDatabase().getObjects().isEmpty() && changed) {
+            if (continuePrompt("Save changes?")) {
+                db.saveDatabase(confirmFilename(db.getDbpath()));
+            }
+        }
+        if (!changed) {
+            System.out.println("Nothing changed, exiting.");
+        }
+    }
 }
