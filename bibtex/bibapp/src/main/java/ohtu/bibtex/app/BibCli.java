@@ -1,5 +1,6 @@
 package ohtu.bibtex.app;
 
+import ohtu.bibtex.IO.IO;
 import org.jbibtex.BibTeXEntry;
 import static org.jbibtex.BibTeXEntry.*;
 import org.jbibtex.Key;
@@ -12,11 +13,15 @@ import org.jbibtex.StringValue;
  */
 public class BibCli {
 
-    private final ConsoleIO io;
+    private final IO io;
 
     public BibCli() {
         io = new ConsoleIO();
     }
+
+	public BibCli(IO io) {
+		this.io = io;
+	}
 
     /**
      * Yes/No prompt

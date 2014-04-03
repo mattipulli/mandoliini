@@ -1,11 +1,12 @@
 package ohtu.bibtex.app;
 
 import java.util.Scanner;
+import ohtu.bibtex.IO.IO;
 
 /**
  * Some basic Console I/O methods
  */
-public class ConsoleIO {
+public class ConsoleIO implements IO {
     private final Scanner scanner = new Scanner(System.in);
     
     public void print(String toPrint) {

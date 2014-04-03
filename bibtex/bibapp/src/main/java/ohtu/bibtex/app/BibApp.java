@@ -11,7 +11,7 @@ public class BibApp {
 
     public static void main(String[] args) {
         BibDatabase db = new BibDatabase(dbpath);
-        BibCli cli = new BibCli();
+        BibCli cli = new BibCli(new ConsoleIO());
         cli.askEntries(db);
     }
 }
