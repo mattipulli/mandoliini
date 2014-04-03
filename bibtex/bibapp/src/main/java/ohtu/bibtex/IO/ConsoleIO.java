@@ -1,4 +1,4 @@
-package ohtu.bibtex.app;
+package ohtu.bibtex.IO;
 
 import java.util.Scanner;
 import ohtu.bibtex.IO.IO;

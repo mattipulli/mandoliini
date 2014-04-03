@@ -1,5 +1,6 @@
 package ohtu.bibtex.app;
 
+import ohtu.bibtex.IO.ConsoleIO;
 import ohtu.bibtex.IO.IO;
 import org.jbibtex.BibTeXEntry;
 import static org.jbibtex.BibTeXEntry.*;

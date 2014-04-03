@@ -1,5 +1,7 @@
 package ohtu.bibtex.app;
 
+import ohtu.bibtex.IO.ConsoleIO;
+
 /**
  * Minimalist program for inputting BibTeX references into a file
  *

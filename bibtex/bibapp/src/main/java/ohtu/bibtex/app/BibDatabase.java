@@ -5,6 +5,7 @@
  */
 package ohtu.bibtex.app;
 
+import ohtu.bibtex.IO.ConsoleIO;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
