@@ -1,7 +1,6 @@
 package ohtu.bibtex.IO;
 
 import java.util.Scanner;
-import ohtu.bibtex.IO.IO;
 
 /**
  * Some basic Console I/O methods
@@ -13,6 +12,7 @@ public class ConsoleIO implements IO {
      * Print text
      * @param toPrint text to be printed
      */
+    @Override
     public void print(String toPrint) {
         System.out.println(toPrint);
     }
@@ -22,6 +22,7 @@ public class ConsoleIO implements IO {
      * @param prompt prompt string
      * @return integer parsed from text
      */
+    @Override
     public int readInt(String prompt) {
         System.out.print(prompt+" ");
         return Integer.parseInt(scanner.nextLine());
@@ -32,6 +33,7 @@ public class ConsoleIO implements IO {
      * @param prompt prompt string
      * @return line
      */
+    @Override
     public String readLine(String prompt) {
         System.out.print(prompt+" ");
         return scanner.nextLine();
@@ -42,6 +44,7 @@ public class ConsoleIO implements IO {
      * @param prompt prompt string
      * @return true for "Yes"
      */
+    @Override
     public boolean readYesNo(String prompt) {
         String ans;
         while(true) {
