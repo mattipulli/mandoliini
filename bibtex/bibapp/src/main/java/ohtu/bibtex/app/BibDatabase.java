@@ -105,6 +105,7 @@ public final class BibDatabase {
      * Print out the reference database in BibTeX format (for testing)
      *
      * @param db reference database
+     * @param io I/O object
      */
     public void printDatabase(BibTeXDatabase db, ConsoleIO io) {
         Writer writer = new StringWriter();
