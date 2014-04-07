@@ -12,6 +12,7 @@ import java.io.Writer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jbibtex.BibTeXDatabase;
+import org.jbibtex.BibTeXEntry;
 import org.jbibtex.BibTeXParser;
 import org.jbibtex.ParseException;
 import org.jbibtex.TokenMgrError;
@@ -48,6 +49,10 @@ public final class BibDatabase {
         } else {
             database = new BibTeXDatabase();
         }
+    }
+    
+    public void addEntry(BibTeXEntry entry){
+        this.database.addObject(entry);
     }
 
     /**
