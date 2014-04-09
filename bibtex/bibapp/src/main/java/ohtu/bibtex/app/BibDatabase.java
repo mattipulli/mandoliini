@@ -113,5 +113,5 @@ public final class BibDatabase {
         }
         io.print(writer.toString());
     }
-
+    
 }
