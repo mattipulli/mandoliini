@@ -21,6 +21,8 @@ import static org.junit.Assert.*;
  */
 public class BibCliTest {
     private BibCli cli;
+    private BibDatabase clidb;
+    private BibUtil cliutil;
     
     public BibCliTest() {
     }
@@ -72,4 +74,19 @@ public class BibCliTest {
          BibTeXEntry entry = this.cli.readBookRef();
          assertNull(entry);
      }
+     
+    @Test
+    public void databaseReturnDatabasePath(){
+         this.clidb=new BibDatabase("tietokanta");
+         String db=this.clidb.getDbpath();
+         assertEquals(db, "tietokanta");
+    }
+     
+    @Test
+    public void databaseDatabaseReturn(){
+        this.clidb=new BibDatabase("refdb.bibtex");
+        assertNotNull(this.clidb.getDatabase());
+    }
+     
+     
 }
