@@ -7,12 +7,13 @@ import ohtu.bibtex.app.BibDatabase;
 import org.jbibtex.BibTeXDatabase;
 import org.jbibtex.BibTeXEntry;
 import org.jbibtex.Key;
+import org.jbibtex.StringValue;
 import org.jbibtex.Value;
 
 /**
  *
- * Conversion functions to populate a Swing TablePane with .bib
- * - TODO: vice versa
+ * Conversion functions to populate a Swing TablePane with .bib - TODO: vice
+ * versa (unfinished & untested)
  */
 public class ConvertTable {
 
@@ -42,7 +43,7 @@ public class ConvertTable {
 
         // Store entry data
         Object[][] data = new Object[allentries.size()][fieldnames.size()];
-        
+
         // Variables for iterating data array (i = entry, j = field in entry)
         int i = 0;
         int j;
@@ -70,5 +71,36 @@ public class ConvertTable {
         }
         // Return data and field names for TablePane
         return new DefaultTableModel(data, fieldnames.toArray());
+    }
+
+    public static BibDatabase tableToBib(DefaultTableModel model, String filename) {
+        BibTeXEntry entry;
+        BibDatabase database = new BibDatabase(filename);
+        for (int i = 0; i < model.getRowCount(); i++) {
+            entry = null;
+            Key cite = null;
+            Key type = null;
+            if (model.getColumnCount() > 1) {
+                // Empty cite key or type -> entry is deleted (ie. not created)
+                if (!model.getValueAt(i, 0).equals("")) {
+                    type = new Key(model.getValueAt(i, 0).toString());
+                }
+                if (!model.getValueAt(i, 1).equals("")) {
+                    cite = new Key(model.getValueAt(i, 1).toString());
+                }
+            }
+
+            if (cite != null && type != null) {
+                entry = new BibTeXEntry(type, cite);
+                for (int j = 2; j < model.getColumnCount(); j++) {
+                    entry.addField(new Key(model.getColumnName(j)), new StringValue(model.getValueAt(i, j).toString(), StringValue.Style.BRACED));
+                }
+            }
+
+            if (entry != null) {
+                database.getDatabase().addObject(entry);
+            }
+        }
+        return database;
     }
 }
