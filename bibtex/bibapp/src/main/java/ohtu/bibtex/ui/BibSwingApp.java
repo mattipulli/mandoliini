@@ -12,13 +12,20 @@ import ohtu.bibtex.app.BibDatabase;
 public class BibSwingApp extends javax.swing.JFrame {
 
     private File editedFile;
-    
+    final String[] columnNames = {"citekey", "type", "author", "title", "publisher", "year",
+        "volume", "series", "address", "edition", "month", "note",
+        "key", "journal", "number", "pages", "booktitle", "edito",
+        "organization"};
+
+    final Object[][] emptyData = new Object[1][19];
+
     /**
      * Creates new form BibSwingApp
      */
     public BibSwingApp() {
-        editedFile = new File("refdb.bibtex");
+        //editedFile = new File("refdb.bibtex");
         initComponents();
+
     }
 
     /**
@@ -54,7 +61,8 @@ public class BibSwingApp extends javax.swing.JFrame {
         scrollpane.setPreferredSize(new java.awt.Dimension(0, 0));
 
         reftable.setModel(
-            ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath()))
+            //ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath()))
+            new DefaultTableModel(emptyData, columnNames)
         );
         scrollpane.setViewportView(reftable);
 
@@ -176,10 +184,11 @@ public class BibSwingApp extends javax.swing.JFrame {
 
     private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
         BibDatabase db = ConvertTable.tableToBib(reftable.getModel());
-        // Use fixed filename for now
-        db.saveDatabase(editedFile.getAbsolutePath());
-        // Reload modified file into table to reflect changes
-        reftable.setModel(ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath())));
+        if (editedFile != null) {
+            db.saveDatabase(editedFile.getAbsolutePath());
+            // Reload modified file into table to reflect changes
+            reftable.setModel(ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath())));
+        }
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
     private void addbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbuttonActionPerformed
