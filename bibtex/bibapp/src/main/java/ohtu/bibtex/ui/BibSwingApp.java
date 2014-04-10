@@ -1,5 +1,7 @@
 package ohtu.bibtex.ui;
 
+import java.io.File;
+import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 import ohtu.bibtex.app.BibDatabase;
 
@@ -45,7 +47,6 @@ public class BibSwingApp extends javax.swing.JFrame {
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(800, 600));
 
         scrollpane.setPreferredSize(new java.awt.Dimension(0, 0));
 
@@ -73,6 +74,11 @@ public class BibSwingApp extends javax.swing.JFrame {
 
         openMenuItem.setMnemonic('o');
         openMenuItem.setText("Open");
+        openMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(openMenuItem);
 
         saveMenuItem.setMnemonic('s');
@@ -182,6 +188,15 @@ public class BibSwingApp extends javax.swing.JFrame {
             ((DefaultTableModel) reftable.getModel()).removeRow(reftable.getSelectedRow());
         }
     }//GEN-LAST:event_removebuttonActionPerformed
+
+    private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
+        final JFileChooser fc = new JFileChooser();
+        int returnVal = fc.showOpenDialog(BibSwingApp.this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            reftable.setModel(ConvertTable.bibToTable(new BibDatabase(file.getAbsolutePath())));
+        }
+    }//GEN-LAST:event_openMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
