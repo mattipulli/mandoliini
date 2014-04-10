@@ -98,6 +98,7 @@
                         <excludes>
                             <exclude>ohtu/bibtex/IO/**.class</exclude>
                             <exclude>ohtu/bibtex/app/BibApp.class</exclude>
+                            <exclude>ohtu/bibtex/ui/BibSwingApp*.class</exclude>
                         </excludes>
                     </instrumentation>
                 </configuration>             
