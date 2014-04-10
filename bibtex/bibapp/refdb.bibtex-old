@@ -1,0 +1,27 @@
+@Book{firstkey,
+	author = {a1author},
+	title = {a2title},
+	publisher = {a3publisher},
+	year = {a4year}
+}
+
+@Book{secondkey,
+	author = {b1author},
+	title = {b2title},
+	publisher = {b3publisher},
+	year = {b4year}
+}
+
+@Book{thirdkey,
+	author = {c1author},
+	title = {c2title},
+	publisher = {c3publisher},
+	year = {c4year},
+        address = {aaac5address}
+}
+
+@Article{fourthkey,
+        author = {d1author},
+        journal = {d2journal},
+        year = {d3year}
+}
