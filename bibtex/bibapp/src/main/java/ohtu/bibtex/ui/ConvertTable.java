@@ -34,7 +34,7 @@ public class ConvertTable {
         ArrayList<BibTeXEntry> allentries = new ArrayList<BibTeXEntry>(entryMap.values());
 
         // Add cite key and type into table fields
-        fieldnames.add(0, "key");
+        fieldnames.add(0, "citekey");
         fieldnames.add(1, "type");
 
         // Collect unique field names and count them
