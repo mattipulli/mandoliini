@@ -11,10 +11,13 @@ import ohtu.bibtex.app.BibDatabase;
  */
 public class BibSwingApp extends javax.swing.JFrame {
 
+    private File editedFile;
+    
     /**
      * Creates new form BibSwingApp
      */
     public BibSwingApp() {
+        editedFile = new File("refdb.bibtex");
         initComponents();
     }
 
@@ -51,7 +54,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         scrollpane.setPreferredSize(new java.awt.Dimension(0, 0));
 
         reftable.setModel(
-            ConvertTable.bibToTable(new BibDatabase("refdb.bibtex"))
+            ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath()))
         );
         scrollpane.setViewportView(reftable);
 
@@ -174,8 +177,9 @@ public class BibSwingApp extends javax.swing.JFrame {
     private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
         BibDatabase db = ConvertTable.tableToBib(reftable.getModel());
         // Use fixed filename for now
-
-        db.saveDatabase("fromtable.bib");
+        db.saveDatabase(editedFile.getAbsolutePath());
+        // Reload modified file into table to reflect changes
+        reftable.setModel(ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath())));
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
     private void addbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbuttonActionPerformed
@@ -193,8 +197,8 @@ public class BibSwingApp extends javax.swing.JFrame {
         final JFileChooser fc = new JFileChooser();
         int returnVal = fc.showOpenDialog(BibSwingApp.this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fc.getSelectedFile();
-            reftable.setModel(ConvertTable.bibToTable(new BibDatabase(file.getAbsolutePath())));
+            editedFile = fc.getSelectedFile();
+            reftable.setModel(ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath())));
         }
     }//GEN-LAST:event_openMenuItemActionPerformed
 
