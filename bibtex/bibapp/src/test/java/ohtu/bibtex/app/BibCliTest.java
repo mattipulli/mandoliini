@@ -7,13 +7,14 @@
 package ohtu.bibtex.app;
 
 import ohtu.bibtex.IO.IOStub;
+import ohtu.bibtex.ui.BibSwingApp;
 import org.jbibtex.BibTeXEntry;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -23,6 +24,7 @@ public class BibCliTest {
     private BibCli cli;
     private BibDatabase clidb;
     private BibUtil cliutil;
+    private BibSwingApp gui;
     
     public BibCliTest() {
     }
@@ -86,6 +88,36 @@ public class BibCliTest {
     public void databaseDatabaseReturn(){
         this.clidb=new BibDatabase("refdb.bibtex");
         assertNotNull(this.clidb.getDatabase());
+    }
+    
+    @Test
+    public void guiAddEntry(){
+        this.gui=new BibSwingApp();
+        int before=this.gui.getReftable().getRowCount();
+        this.gui.getAddbutton().doClick();
+        int after=this.gui.getReftable().getRowCount();
+        assertTrue(after==before+1);
+    }
+    
+    @Test
+    public void guiDropEntry(){
+        this.gui=new BibSwingApp();
+        this.gui.getAddbutton().doClick();
+        int before=this.gui.getReftable().getRowCount();
+        this.gui.getReftable().setRowSelectionInterval(0,0);
+        this.gui.getRemovebutton().doClick();
+        int after=this.gui.getReftable().getRowCount();
+        assertTrue(after==before-1);
+    }
+    
+    @Test
+    public void guiAddDataToEntry(){
+        
+    }
+    
+    @Test
+    public void guiDeleteDataFromEntry(){
+        
     }
      
      

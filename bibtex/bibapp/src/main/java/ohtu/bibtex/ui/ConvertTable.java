@@ -21,7 +21,7 @@ public class ConvertTable {
      * Convert BibDatabase to a DefaultTableModel for Swing TablePane
      *
      * @param db BibDatabase to convert
-     * @return
+     * @return DefaultTableModel for Swing TablePane (data + field names)
      */
     public static DefaultTableModel bibToTable(BibDatabase db) {
         // Load reference database

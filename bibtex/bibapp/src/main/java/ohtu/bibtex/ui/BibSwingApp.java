@@ -1,21 +1,37 @@
 package ohtu.bibtex.ui;
 
+import java.io.File;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import ohtu.bibtex.IO.ConsoleIO;
 import ohtu.bibtex.app.BibDatabase;
 
 /**
  *
- * Simple table driven "editor" for BibTeX files - currently only filling the
- * table from a .bib file works (sort of)
+ * Simple table driven "editor" for BibTeX files
  */
 public class BibSwingApp extends javax.swing.JFrame {
+
+    private File editedFile;
+    final String[] columnNames = {"citekey", "type", "author", "title", "publisher", "year",
+        "volume", "series", "address", "edition", "month", "note",
+        "key", "journal", "number", "pages", "booktitle", "edito",
+        "organization"};
+
+    final Object[][] emptyData = new Object[1][19];
 
     /**
      * Creates new form BibSwingApp
      */
     public BibSwingApp() {
+        //editedFile = new File("refdb.bibtex");
         initComponents();
+
     }
 
     /**
@@ -51,8 +67,10 @@ public class BibSwingApp extends javax.swing.JFrame {
         scrollpane.setPreferredSize(new java.awt.Dimension(0, 0));
 
         reftable.setModel(
-            ConvertTable.bibToTable(new BibDatabase("malli.bibtex"))
+            //ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath()))
+            new DefaultTableModel(emptyData, columnNames)
         );
+        
         scrollpane.setViewportView(reftable);
 
         addbutton.setText("Add entry");
@@ -74,6 +92,11 @@ public class BibSwingApp extends javax.swing.JFrame {
 
         openMenuItem.setMnemonic('o');
         openMenuItem.setText("Open");
+        openMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(openMenuItem);
 
         saveMenuItem.setMnemonic('s');
@@ -88,6 +111,11 @@ public class BibSwingApp extends javax.swing.JFrame {
         saveAsMenuItem.setMnemonic('a');
         saveAsMenuItem.setText("Save As ...");
         saveAsMenuItem.setDisplayedMnemonicIndex(5);
+        saveAsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveAsMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(saveAsMenuItem);
 
         exitMenuItem.setMnemonic('x');
@@ -168,9 +196,11 @@ public class BibSwingApp extends javax.swing.JFrame {
 
     private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
         BibDatabase db = ConvertTable.tableToBib(reftable.getModel());
-        // Use fixed filename for now
-
-        db.saveDatabase("fromtable.bib");
+        if (editedFile != null) {
+            db.saveDatabase(editedFile.getAbsolutePath());
+            // Reload modified file into table to reflect changes
+            reftable.setModel(ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath())));
+        }
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
     private void addbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbuttonActionPerformed
@@ -183,6 +213,32 @@ public class BibSwingApp extends javax.swing.JFrame {
             ((DefaultTableModel) reftable.getModel()).removeRow(reftable.getSelectedRow());
         }
     }//GEN-LAST:event_removebuttonActionPerformed
+
+    private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
+        JFileChooser fc = selectFile();
+        int returnVal = fc.showOpenDialog(BibSwingApp.this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            editedFile = fc.getSelectedFile();
+            reftable.setModel(ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath())));
+        }
+    }//GEN-LAST:event_openMenuItemActionPerformed
+
+    private JFileChooser selectFile() {
+        JFileChooser fc = new JFileChooser();
+        return fc;
+    }
+
+    private void saveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsMenuItemActionPerformed
+        JFileChooser fc = selectFile();
+        int returnVal = fc.showOpenDialog(BibSwingApp.this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            editedFile = fc.getSelectedFile();
+            BibDatabase db = ConvertTable.tableToBib(reftable.getModel());
+            db.saveDatabase(editedFile.getAbsolutePath());
+            // Reload modified file into table to reflect changes
+            reftable.setModel(ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath())));
+        }
+    }//GEN-LAST:event_saveAsMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -219,6 +275,88 @@ public class BibSwingApp extends javax.swing.JFrame {
         });
     }
 
+    public File getEditedFile() {
+        return editedFile;
+    }
+
+    public String[] getColumnNames() {
+        return columnNames;
+    }
+
+    public Object[][] getEmptyData() {
+        return emptyData;
+    }
+
+    public JMenuItem getAboutMenuItem() {
+        return aboutMenuItem;
+    }
+
+    public JButton getAddbutton() {
+        return addbutton;
+    }
+
+    public JMenuItem getContentsMenuItem() {
+        return contentsMenuItem;
+    }
+
+    public JMenuItem getCopyMenuItem() {
+        return copyMenuItem;
+    }
+
+    public JMenuItem getCutMenuItem() {
+        return cutMenuItem;
+    }
+
+    public JMenuItem getDeleteMenuItem() {
+        return deleteMenuItem;
+    }
+
+    public JMenu getEditMenu() {
+        return editMenu;
+    }
+
+    public JMenuItem getExitMenuItem() {
+        return exitMenuItem;
+    }
+
+    public JMenu getFileMenu() {
+        return fileMenu;
+    }
+
+    public JMenu getHelpMenu() {
+        return helpMenu;
+    }
+
+    public JMenuItem getOpenMenuItem() {
+        return openMenuItem;
+    }
+
+    public JMenuItem getPasteMenuItem() {
+        return pasteMenuItem;
+    }
+
+    public JTable getReftable() {
+        return reftable;
+    }
+
+    public JButton getRemovebutton() {
+        return removebutton;
+    }
+
+    public JMenuItem getSaveAsMenuItem() {
+        return saveAsMenuItem;
+    }
+
+    public JMenuItem getSaveMenuItem() {
+        return saveMenuItem;
+    }
+
+    public JScrollPane getScrollpane() {
+        return scrollpane;
+    }
+    
+    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JButton addbutton;
@@ -240,4 +378,6 @@ public class BibSwingApp extends javax.swing.JFrame {
     private javax.swing.JScrollPane scrollpane;
     // End of variables declaration//GEN-END:variables
 
+    
+    
 }
