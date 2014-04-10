@@ -1,7 +1,13 @@
 package ohtu.bibtex.ui;
 
 import java.io.File;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import ohtu.bibtex.app.BibDatabase;
 
@@ -268,6 +274,92 @@ public class BibSwingApp extends javax.swing.JFrame {
         });
     }
 
+    public File getEditedFile() {
+        return editedFile;
+    }
+
+    public String[] getColumnNames() {
+        return columnNames;
+    }
+
+    public Object[][] getEmptyData() {
+        return emptyData;
+    }
+
+    public JMenuItem getAboutMenuItem() {
+        return aboutMenuItem;
+    }
+
+    public JButton getAddbutton() {
+        return addbutton;
+    }
+
+    public JMenuItem getContentsMenuItem() {
+        return contentsMenuItem;
+    }
+
+    public JMenuItem getCopyMenuItem() {
+        return copyMenuItem;
+    }
+
+    public JMenuItem getCutMenuItem() {
+        return cutMenuItem;
+    }
+
+    public JMenuItem getDeleteMenuItem() {
+        return deleteMenuItem;
+    }
+
+    public JMenu getEditMenu() {
+        return editMenu;
+    }
+
+    public JMenuItem getExitMenuItem() {
+        return exitMenuItem;
+    }
+
+    public JMenu getFileMenu() {
+        return fileMenu;
+    }
+
+    public JMenu getHelpMenu() {
+        return helpMenu;
+    }
+
+    public JMenuBar getMenuBar() {
+        return menuBar;
+    }
+
+    public JMenuItem getOpenMenuItem() {
+        return openMenuItem;
+    }
+
+    public JMenuItem getPasteMenuItem() {
+        return pasteMenuItem;
+    }
+
+    public JTable getReftable() {
+        return reftable;
+    }
+
+    public JButton getRemovebutton() {
+        return removebutton;
+    }
+
+    public JMenuItem getSaveAsMenuItem() {
+        return saveAsMenuItem;
+    }
+
+    public JMenuItem getSaveMenuItem() {
+        return saveMenuItem;
+    }
+
+    public JScrollPane getScrollpane() {
+        return scrollpane;
+    }
+    
+    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JButton addbutton;
@@ -289,4 +381,6 @@ public class BibSwingApp extends javax.swing.JFrame {
     private javax.swing.JScrollPane scrollpane;
     // End of variables declaration//GEN-END:variables
 
+    
+    
 }
