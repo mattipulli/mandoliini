@@ -104,6 +104,11 @@ public class BibSwingApp extends javax.swing.JFrame {
         saveAsMenuItem.setMnemonic('a');
         saveAsMenuItem.setText("Save As ...");
         saveAsMenuItem.setDisplayedMnemonicIndex(5);
+        saveAsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveAsMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(saveAsMenuItem);
 
         exitMenuItem.setMnemonic('x');
@@ -203,13 +208,30 @@ public class BibSwingApp extends javax.swing.JFrame {
     }//GEN-LAST:event_removebuttonActionPerformed
 
     private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
-        final JFileChooser fc = new JFileChooser();
+        JFileChooser fc = selectFile();
         int returnVal = fc.showOpenDialog(BibSwingApp.this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             editedFile = fc.getSelectedFile();
             reftable.setModel(ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath())));
         }
     }//GEN-LAST:event_openMenuItemActionPerformed
+
+    private JFileChooser selectFile() {
+        JFileChooser fc = new JFileChooser();
+        return fc;
+    }
+
+    private void saveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsMenuItemActionPerformed
+        JFileChooser fc = selectFile();
+        int returnVal = fc.showOpenDialog(BibSwingApp.this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            editedFile = fc.getSelectedFile();
+            BibDatabase db = ConvertTable.tableToBib(reftable.getModel());
+            db.saveDatabase(editedFile.getAbsolutePath());
+            // Reload modified file into table to reflect changes
+            reftable.setModel(ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath())));
+        }
+    }//GEN-LAST:event_saveAsMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
