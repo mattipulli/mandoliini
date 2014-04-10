@@ -3,6 +3,7 @@ package ohtu.bibtex.ui;
 import java.util.ArrayList;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import ohtu.bibtex.app.BibDatabase;
 import org.jbibtex.BibTeXDatabase;
 import org.jbibtex.BibTeXEntry;
@@ -12,11 +13,16 @@ import org.jbibtex.Value;
 
 /**
  *
- * Conversion functions to populate a Swing TablePane with .bib - TODO: vice
- * versa (unfinished & untested)
+ * Conversion functions to populate a Swing TablePane with .bib and vice versa
  */
 public class ConvertTable {
 
+    /**
+     * Convert BibDatabase to a DefaultTableModel for Swing TablePane
+     *
+     * @param db BibDatabase to convert
+     * @return
+     */
     public static DefaultTableModel bibToTable(BibDatabase db) {
         // Load reference database
         BibTeXDatabase bdb = db.getDatabase();
@@ -73,34 +79,61 @@ public class ConvertTable {
         return new DefaultTableModel(data, fieldnames.toArray());
     }
 
-    public static BibDatabase tableToBib(DefaultTableModel model, String filename) {
+    /**
+     * Convert TablePane contents into BibDatabase for saving. TODO: very ugly
+     * and hairy with all the null checks
+     *
+     * @param model TablePane model (via GetModel())
+     * @return new BibDatabase with entries populated from TablePane
+     */
+    public static BibDatabase tableToBib(TableModel model) {
         BibTeXEntry entry;
-        BibDatabase database = new BibDatabase(filename);
+        // Use dummy filename - need to fix this filename business
+        BibDatabase database = new BibDatabase("dummy.bib");
+        // For each to-be entry (row) in table
         for (int i = 0; i < model.getRowCount(); i++) {
+            // Initialize variables for null checks
             entry = null;
             Key cite = null;
             Key type = null;
+
+            // If at least two columns, read the first two as cite key and type
             if (model.getColumnCount() > 1) {
                 // Empty cite key or type -> entry is deleted (ie. not created)
-                if (!model.getValueAt(i, 0).equals("")) {
-                    type = new Key(model.getValueAt(i, 0).toString());
+
+                // Read cite key from *FIRST* column
+                if (model.getValueAt(i, 0) != null && !model.getValueAt(i, 0).toString().trim().equals("")) {
+                    cite = new Key(model.getValueAt(i, 0).toString().trim());
                 }
-                if (!model.getValueAt(i, 1).equals("")) {
-                    cite = new Key(model.getValueAt(i, 1).toString());
+                // Read type from *SECOND* column
+                if (model.getValueAt(i, 1) != null && !model.getValueAt(i, 1).toString().trim().equals("")) {
+                    type = new Key(model.getValueAt(i, 1).toString().trim());
                 }
             }
 
+            // Add entry only if both cite key and type are non-null
             if (cite != null && type != null) {
+                // Create new entry
                 entry = new BibTeXEntry(type, cite);
+                // Iterate rest of the columns
                 for (int j = 2; j < model.getColumnCount(); j++) {
-                    entry.addField(new Key(model.getColumnName(j)), new StringValue(model.getValueAt(i, j).toString(), StringValue.Style.BRACED));
+                    Key field;
+                    StringValue value;
+                    // Add non-empty field and value to entry
+                    if (model.getValueAt(i, j) != null && !model.getValueAt(i, j).toString().trim().equals("")) {
+                        field = new Key(model.getColumnName(j));
+                        value = new StringValue(model.getValueAt(i, j).toString().trim(), StringValue.Style.BRACED);
+                        entry.addField(field, value);
+                    }
                 }
             }
 
+            // Add non-null entry
             if (entry != null) {
                 database.getDatabase().addObject(entry);
             }
         }
+        // Return new database
         return database;
     }
 }

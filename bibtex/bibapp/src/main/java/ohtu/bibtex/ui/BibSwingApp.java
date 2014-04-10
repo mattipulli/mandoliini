@@ -1,11 +1,13 @@
 package ohtu.bibtex.ui;
 
+import javax.swing.table.DefaultTableModel;
+import ohtu.bibtex.IO.ConsoleIO;
 import ohtu.bibtex.app.BibDatabase;
 
 /**
  *
- * Simple table driven "editor" for BibTeX files
- * - currently only filling the table from a .bib file works (sort of)
+ * Simple table driven "editor" for BibTeX files - currently only filling the
+ * table from a .bib file works (sort of)
  */
 public class BibSwingApp extends javax.swing.JFrame {
 
@@ -58,6 +60,11 @@ public class BibSwingApp extends javax.swing.JFrame {
 
         saveMenuItem.setMnemonic('s');
         saveMenuItem.setText("Save");
+        saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(saveMenuItem);
 
         saveAsMenuItem.setMnemonic('a');
@@ -129,6 +136,12 @@ public class BibSwingApp extends javax.swing.JFrame {
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
+
+    private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
+        BibDatabase db = ConvertTable.tableToBib(reftable.getModel());
+        // Use fixed filename for now
+        db.saveDatabase("fromtable.bib");
+    }//GEN-LAST:event_saveMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
