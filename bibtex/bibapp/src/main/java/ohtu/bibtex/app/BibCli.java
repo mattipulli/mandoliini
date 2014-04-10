@@ -53,6 +53,15 @@ public class BibCli {
             }
         }
     }
+    
+    public org.jbibtex.BibTeXEntry createEntry(String cite, StringValue author, StringValue title, StringValue publisher, StringValue year){
+        BibTeXEntry entry = new BibTeXEntry(new Key("Book"), new Key(cite));
+        entry.addField(KEY_AUTHOR, author);
+        entry.addField(KEY_TITLE, title);
+        entry.addField(KEY_PUBLISHER, publisher);
+        entry.addField(KEY_YEAR, year);
+        return entry;
+    } 
 
     /**
      * Read in values for creating a Book reference
@@ -85,12 +94,8 @@ public class BibCli {
         if (year.toUserString().equals("")) {
             return null;
         }
-        entry = new BibTeXEntry(new Key("Book"), new Key(cite));
-        entry.addField(KEY_AUTHOR, author);
-        entry.addField(KEY_TITLE, title);
-        entry.addField(KEY_PUBLISHER, publisher);
-        entry.addField(KEY_YEAR, year);
-        return entry;
+        
+        return this.createEntry(cite, author, title, publisher, year);
     }
 
     /**
