@@ -24,7 +24,7 @@ public class BibCliTest {
     private BibCli cli;
     private BibDatabase clidb;
     private BibUtil cliutil;
-    private BibSwingApp gui;
+    
     
     public BibCliTest() {
     }
@@ -89,36 +89,4 @@ public class BibCliTest {
         this.clidb=new BibDatabase("refdb.bibtex");
         assertNotNull(this.clidb.getDatabase());
     }
-    
-    @Test
-    public void guiAddEntry(){
-        this.gui=new BibSwingApp();
-        int before=this.gui.getReftable().getRowCount();
-        this.gui.getAddbutton().doClick();
-        int after=this.gui.getReftable().getRowCount();
-        assertTrue(after==before+1);
-    }
-    
-    @Test
-    public void guiDropEntry(){
-        this.gui=new BibSwingApp();
-        this.gui.getAddbutton().doClick();
-        int before=this.gui.getReftable().getRowCount();
-        this.gui.getReftable().setRowSelectionInterval(0,0);
-        this.gui.getRemovebutton().doClick();
-        int after=this.gui.getReftable().getRowCount();
-        assertTrue(after==before-1);
-    }
-    
-    @Test
-    public void guiAddDataToEntry(){
-        
-    }
-    
-    @Test
-    public void guiDeleteDataFromEntry(){
-        
-    }
-     
-     
 }

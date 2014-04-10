@@ -91,7 +91,16 @@
                         <format>html</format>
                         <format>xml</format>
                     </formats>
-                </configuration>
+                    <instrumentation>
+                        <!--                    <ignores>
+                            <ignore>com.example.boringcode.*</ignore>
+                        </ignores>-->
+                        <excludes>
+                            <exclude>ohtu/bibtex/IO/**.class</exclude>
+                            <exclude>ohtu/bibtex/app/BibApp.class</exclude>
+                        </excludes>
+                    </instrumentation>
+                </configuration>             
             </plugin>
             <plugin>
                 <groupId>org.easyb</groupId>
