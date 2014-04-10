@@ -1,13 +1,11 @@
 package ohtu.bibtex.ui;
 
 import javax.swing.table.DefaultTableModel;
-import ohtu.bibtex.IO.ConsoleIO;
 import ohtu.bibtex.app.BibDatabase;
 
 /**
  *
- * Simple table driven "editor" for BibTeX files - currently only filling the
- * table from a .bib file works (sort of)
+ * Simple table driven "editor" for BibTeX files
  */
 public class BibSwingApp extends javax.swing.JFrame {
 
@@ -47,6 +45,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(800, 600));
 
         scrollpane.setPreferredSize(new java.awt.Dimension(0, 0));
 
