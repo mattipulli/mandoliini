@@ -169,7 +169,7 @@ public class BibSwingApp extends javax.swing.JFrame {
     private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
         BibDatabase db = ConvertTable.tableToBib(reftable.getModel());
         // Use fixed filename for now
-        
+
         db.saveDatabase("fromtable.bib");
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
@@ -179,7 +179,9 @@ public class BibSwingApp extends javax.swing.JFrame {
     }//GEN-LAST:event_addbuttonActionPerformed
 
     private void removebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removebuttonActionPerformed
-        ((DefaultTableModel)reftable.getModel()).removeRow(reftable.getSelectedRow());
+        if (reftable.getSelectedRow() != -1) {
+            ((DefaultTableModel) reftable.getModel()).removeRow(reftable.getSelectedRow());
+        }
     }//GEN-LAST:event_removebuttonActionPerformed
 
     /**
