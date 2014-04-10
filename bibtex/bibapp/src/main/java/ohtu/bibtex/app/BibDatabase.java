@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -40,14 +42,22 @@ public final class BibDatabase {
 
     public BibDatabase(String databaseFilename) {
         dbpath = databaseFilename;
-        File f = new File(dbpath);
-
-        // load existing database from file or create an empty one
-        if (f.exists()) {
+        //File f = new File(dbpath);
+        InputStream stream = ClassLoader.getSystemResourceAsStream(dbpath);
+        
+        if (stream != null) {
             database = readDatabase(dbpath);
         } else {
             database = new BibTeXDatabase();
         }
+
+        // load existing database from file or create an empty one
+//        if (f.exists()) {
+//            System.out.println("it existsss");
+//            database = readDatabase(dbpath);
+//        } else {
+//            database = new BibTeXDatabase();
+//        }
     }
 
     /**
@@ -60,8 +70,10 @@ public final class BibDatabase {
         Reader reader = null;
         BibTeXDatabase db = null;
         try {
-            reader = new FileReader(filename);
-        } catch (FileNotFoundException ex) {
+            InputStream stream = ClassLoader.getSystemResourceAsStream(filename);
+            reader = new InputStreamReader(stream);
+            //reader = new FileReader(filename);
+        } catch (Exception ex) {
             Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "File not found: " + filename, ex);
         }
         if (reader != null) {

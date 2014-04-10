@@ -51,7 +51,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         scrollpane.setPreferredSize(new java.awt.Dimension(0, 0));
 
         reftable.setModel(
-            ConvertTable.bibToTable(new BibDatabase("refdb.bibtex"))
+            ConvertTable.bibToTable(new BibDatabase("malli.bibtex"))
         );
         scrollpane.setViewportView(reftable);
 
