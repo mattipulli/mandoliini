@@ -29,6 +29,8 @@ public class BibSwingApp extends javax.swing.JFrame {
 
         scrollpane = new javax.swing.JScrollPane();
         reftable = new javax.swing.JTable();
+        addbutton = new javax.swing.JButton();
+        removebutton = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -46,10 +48,26 @@ public class BibSwingApp extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        scrollpane.setPreferredSize(new java.awt.Dimension(0, 0));
+
         reftable.setModel(
             ConvertTable.bibToTable(new BibDatabase("refdb.bibtex"))
         );
         scrollpane.setViewportView(reftable);
+
+        addbutton.setText("Add entry");
+        addbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addbuttonActionPerformed(evt);
+            }
+        });
+
+        removebutton.setText("Remove entry");
+        removebutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removebuttonActionPerformed(evt);
+            }
+        });
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -124,10 +142,21 @@ public class BibSwingApp extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(addbutton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(removebutton)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addbutton)
+                    .addComponent(removebutton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -143,6 +172,15 @@ public class BibSwingApp extends javax.swing.JFrame {
         
         db.saveDatabase("fromtable.bib");
     }//GEN-LAST:event_saveMenuItemActionPerformed
+
+    private void addbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbuttonActionPerformed
+        DefaultTableModel model = (DefaultTableModel) reftable.getModel();
+        model.addRow(new Object[][]{});
+    }//GEN-LAST:event_addbuttonActionPerformed
+
+    private void removebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removebuttonActionPerformed
+        ((DefaultTableModel)reftable.getModel()).removeRow(reftable.getSelectedRow());
+    }//GEN-LAST:event_removebuttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -181,6 +219,7 @@ public class BibSwingApp extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
+    private javax.swing.JButton addbutton;
     private javax.swing.JMenuItem contentsMenuItem;
     private javax.swing.JMenuItem copyMenuItem;
     private javax.swing.JMenuItem cutMenuItem;
@@ -193,6 +232,7 @@ public class BibSwingApp extends javax.swing.JFrame {
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;
     private javax.swing.JTable reftable;
+    private javax.swing.JButton removebutton;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JScrollPane scrollpane;
