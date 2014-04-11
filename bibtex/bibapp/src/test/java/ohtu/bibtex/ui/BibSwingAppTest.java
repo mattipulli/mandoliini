@@ -37,7 +37,8 @@ public class BibSwingAppTest {
     @After
     public void tearDown() {
     }
-
+/*
+   // Temporarily commented out, jenkins can't handle GUI
     @Test
     public void guiAddEntry() {
         this.gui = new BibSwingApp();
@@ -67,4 +68,5 @@ public class BibSwingAppTest {
     public void guiDeleteDataFromEntry() {
 
     }
+    */
 }
