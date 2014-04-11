@@ -37,7 +37,7 @@ public class BibSwingAppTest {
     @After
     public void tearDown() {
     }
-/*
+
    // Temporarily commented out, jenkins can't handle GUI
     @Test
     public void guiAddEntry() {
@@ -45,7 +45,7 @@ public class BibSwingAppTest {
         int before = this.gui.getReftable().getRowCount();
         this.gui.getAddbutton().doClick();
         int after = this.gui.getReftable().getRowCount();
-        assertTrue(after == before + 1);
+        assertEquals(before + 1,after);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class BibSwingAppTest {
         this.gui.getReftable().setRowSelectionInterval(0, 0);
         this.gui.getRemovebutton().doClick();
         int after = this.gui.getReftable().getRowCount();
-        assertTrue(after == before - 1);
+        assertEquals(before - 1, after);
     }
 
     @Test
@@ -68,5 +68,5 @@ public class BibSwingAppTest {
     public void guiDeleteDataFromEntry() {
 
     }
-    */
+
 }
