@@ -24,6 +24,7 @@ public class BibCliTest {
     private BibCli cli;
     private BibDatabase clidb;
     private BibUtil cliutil;
+    private IOStub iostub;
     
     
     public BibCliTest() {
@@ -89,4 +90,43 @@ public class BibCliTest {
         this.clidb=new BibDatabase("refdb.bibtex");
         assertNotNull(this.clidb.getDatabase());
     }
+    
+    @Test
+    public void testIOPrint(){
+        this.iostub=new IOStub();
+        int before=this.iostub.getPrints().size();
+        this.iostub.print("Testirivi");
+        int after=this.iostub.getPrints().size();
+        assertFalse(before==after);
+    }
+    
+    @Test
+    public void testIOPrintNULL(){
+        this.iostub=new IOStub();
+        int before=this.iostub.getPrints().size();
+        this.iostub.print(null);
+        int after=this.iostub.getPrints().size();
+        assertFalse(before==after);
+    }
+    
+    @Test
+    public void testIOReadInt(){
+        this.iostub=new IOStub("1");
+        int before=this.iostub.getPrints().size();
+        this.iostub.readInt("1");
+        int after=this.iostub.getPrints().size();
+        assertFalse(before==after);
+    }
+    
+    @Test
+    public void testIOReadIntNoNumbers(){
+        this.iostub=new IOStub("<asdg<");
+        int before=this.iostub.getPrints().size();
+        try{
+            this.iostub.readInt("Testi");
+        }catch(Exception e){
+            assertFalse(false);
+        }
+    }
+    
 }
