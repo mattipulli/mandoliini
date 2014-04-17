@@ -6,6 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -32,7 +33,14 @@ public class BibSwingApp extends javax.swing.JFrame {
      */
     public BibSwingApp() {
         initComponents();
-
+        originaltable = editedtable.getModel();
+        updateStatusbar("Welcome to BibSwingApp");
+        // Show some minimal help
+        JOptionPane.showMessageDialog(null, "* Select rows with Shift / Ctrl\n"
+                + "* Preview will format selected entries into BibTeX (preview panel)\n"
+                + "* Append adds selected entries into preview panel\n"
+                + "* Saving saves *ONLY* currently filtered (visible) table contents\n"
+                + "* If you don't want that, clear the filter before saving by filtering for an empty string\n");
     }
 
     /**
@@ -57,7 +65,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         filterfield = new javax.swing.JTextField();
         filterbutton = new javax.swing.JButton();
         appendbutton = new javax.swing.JButton();
-        notfoundlabel = new javax.swing.JLabel();
+        statusbar = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -182,13 +190,13 @@ public class BibSwingApp extends javax.swing.JFrame {
         });
         getContentPane().add(appendbutton, new java.awt.GridBagConstraints());
 
-        notfoundlabel.setMaximumSize(new java.awt.Dimension(120, 24));
-        notfoundlabel.setPreferredSize(new java.awt.Dimension(120, 24));
+        statusbar.setMaximumSize(new java.awt.Dimension(32767, 32767));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        getContentPane().add(notfoundlabel, gridBagConstraints);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        getContentPane().add(statusbar, gridBagConstraints);
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -278,20 +286,27 @@ public class BibSwingApp extends javax.swing.JFrame {
     private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
         BibDatabase db = ConvertTable.tableToBib(editedtable.getModel());
         if (editedFile != null) {
-            db.saveDatabase(editedFile.getAbsolutePath());
+            String path = editedFile.getAbsolutePath();
+            db.saveDatabase(path);
             // Reload modified file into table to reflect changes
-            editedtable.setModel(ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath())));
+            editedtable.setModel(ConvertTable.bibToTable(new BibDatabase(path)));
+            originaltable = editedtable.getModel();
+            updateStatusbar("Saved " + path);
         }
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
     private void addbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbuttonActionPerformed
         DefaultTableModel model = (DefaultTableModel) editedtable.getModel();
         model.addRow(new Object[][]{});
+        updateStatusbar("Added entry");
     }//GEN-LAST:event_addbuttonActionPerformed
 
     private void removebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removebuttonActionPerformed
         if (editedtable.getSelectedRow() != -1) {
             ((DefaultTableModel) editedtable.getModel()).removeRow(editedtable.getSelectedRow());
+            updateStatusbar("Removed entry");
+        } else {
+            updateStatusbar("No entry selected for removal");
         }
     }//GEN-LAST:event_removebuttonActionPerformed
 
@@ -300,9 +315,11 @@ public class BibSwingApp extends javax.swing.JFrame {
         int returnVal = fc.showOpenDialog(BibSwingApp.this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             editedFile = fc.getSelectedFile();
-            editedtable.setModel(ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath())));
+            String path = editedFile.getAbsolutePath();
+            editedtable.setModel(ConvertTable.bibToTable(new BibDatabase(path)));
+            originaltable = editedtable.getModel();
+            updateStatusbar("Opened " + path);
         }
-        originaltable = editedtable.getModel();
     }//GEN-LAST:event_openMenuItemActionPerformed
 
     private JFileChooser selectFile() {
@@ -316,21 +333,23 @@ public class BibSwingApp extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             editedFile = fc.getSelectedFile();
             BibDatabase db = ConvertTable.tableToBib(editedtable.getModel());
-            db.saveDatabase(editedFile.getAbsolutePath());
+            String path = editedFile.getAbsolutePath();
+            db.saveDatabase(path);
             // Reload modified file into table to reflect changes
-            editedtable.setModel(ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath())));
+            editedtable.setModel(ConvertTable.bibToTable(new BibDatabase(path)));
+            originaltable = editedtable.getModel();
+            updateStatusbar("Saved " + path);
         }
-        originaltable = editedtable.getModel();
     }//GEN-LAST:event_saveAsMenuItemActionPerformed
 
     /**
      * Return table model that includes only the chosen row indices
+     *
      * @param table new table model
      * @param rows rows to be selected, int array of row index numbers
-     * @return 
+     * @return
      */
     private DefaultTableModel getOnlyRows(TableModel table, int[] rows) {
-        DefaultTableModel subset = null;
         int colcount = table.getColumnCount();
         int rowcount = table.getRowCount();
         Object[] names = new String[colcount];
@@ -357,7 +376,8 @@ public class BibSwingApp extends javax.swing.JFrame {
 
     /**
      * Return BibTeX formatted string of the selected rows
-     * @return 
+     *
+     * @return
      */
     private String previewText() {
         DefaultTableModel selected;
@@ -395,12 +415,25 @@ public class BibSwingApp extends javax.swing.JFrame {
     }
 
     private void previewbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previewbuttonActionPerformed
-            previewtext.setText(previewText());        
+        previewtext.setText(previewText());
     }//GEN-LAST:event_previewbuttonActionPerformed
-    
+
+    /**
+     * Show visible/total row count and custom message in statusbar
+     * @param msg message
+     */    
+    private void updateStatusbar(String msg) {
+        statusbar.setText("");
+        if (editedtable != null && originaltable != null) {
+            statusbar.setText("[" + editedtable.getRowCount() + "/" + originaltable.getRowCount() + "]");
+        }
+        statusbar.setText(statusbar.getText() + msg);
+    }
+
     /**
      * Filter table by string
-     * @param evt 
+     *
+     * @param evt
      */
     private void filterbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterbuttonActionPerformed
         // If no "original state" has been recorded (after Open/Save), record it now
@@ -410,6 +443,12 @@ public class BibSwingApp extends javax.swing.JFrame {
         int colcount = originaltable.getColumnCount();
         int rowcount = originaltable.getRowCount();
         String search = filterfield.getText().trim().toLowerCase();
+
+        if (search.trim().equals("")) {
+            editedtable.setModel(originaltable);
+            updateStatusbar("Filter disabled");
+            return;
+        }
 
         ArrayList<Integer> hits = new ArrayList();
         // Simply find value in table and record matching rows
@@ -428,7 +467,6 @@ public class BibSwingApp extends javax.swing.JFrame {
         }
         // If something found
         if (hits.size() > 0) {
-            notfoundlabel.setText("");
             int rows[] = new int[hits.size()];
             // Iterate all hits and store row indices in array
             for (int i = 0; i < rows.length; i++) {
@@ -436,19 +474,21 @@ public class BibSwingApp extends javax.swing.JFrame {
             }
             // Set only rows with hits visible
             editedtable.setModel((DefaultTableModel) getOnlyRows(originaltable, rows));
+            updateStatusbar("Filter: '" + search + "'");
         } else {
-            notfoundlabel.setText("'"+search+"' not found");
+            updateStatusbar(" '" + search + "' not found");
         }
     }//GEN-LAST:event_filterbuttonActionPerformed
 
     /**
      * Append preview text (selected rows' BibTeX) to end of preview buffer
-     * @param evt 
+     *
+     * @param evt
      */
     private void appendbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appendbuttonActionPerformed
         String preview = previewText();
-        if(preview != null) {
-            previewtext.setText(previewtext.getText()+"\n\n"+preview);
+        if (preview != null) {
+            previewtext.setText(previewtext.getText() + "\n\n" + preview);
         }
     }//GEN-LAST:event_appendbuttonActionPerformed
 
@@ -483,6 +523,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new BibSwingApp().setVisible(true);
+
             }
         });
     }
@@ -585,7 +626,6 @@ public class BibSwingApp extends javax.swing.JFrame {
     private javax.swing.JTextField filterfield;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JLabel notfoundlabel;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;
     private javax.swing.JButton previewbutton;
@@ -595,6 +635,7 @@ public class BibSwingApp extends javax.swing.JFrame {
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JScrollPane scrollpane;
+    private javax.swing.JLabel statusbar;
     // End of variables declaration//GEN-END:variables
 
 }
