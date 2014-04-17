@@ -1,7 +1,13 @@
 package ohtu.bibtex.ui;
 
 import java.io.File;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import ohtu.bibtex.app.BibDatabase;
 
@@ -41,6 +47,8 @@ public class BibSwingApp extends javax.swing.JFrame {
         reftable = new javax.swing.JTable();
         addbutton = new javax.swing.JButton();
         removebutton = new javax.swing.JButton();
+        entrytype = new javax.swing.JComboBox();
+        jLabel1 = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -79,6 +87,10 @@ public class BibSwingApp extends javax.swing.JFrame {
                 removebuttonActionPerformed(evt);
             }
         });
+
+        entrytype.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Article", "Book", "Booklet", "Conference", "Inbook", "Incollection", "Inproceedings", "Manual", "Phdthesis", "Proceedings", "Techreport", "Unpublished" }));
+
+        jLabel1.setText("Type:");
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -162,19 +174,25 @@ public class BibSwingApp extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(addbutton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(removebutton)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(3, 3, 3)
+                .addComponent(entrytype, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(85, 85, 85))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addbutton)
-                    .addComponent(removebutton))
+                    .addComponent(removebutton)
+                    .addComponent(entrytype, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -268,6 +286,88 @@ public class BibSwingApp extends javax.swing.JFrame {
         });
     }
 
+    public File getEditedFile() {
+        return editedFile;
+    }
+
+    public String[] getColumnNames() {
+        return columnNames;
+    }
+
+    public Object[][] getEmptyData() {
+        return emptyData;
+    }
+
+    public JMenuItem getAboutMenuItem() {
+        return aboutMenuItem;
+    }
+
+    public JButton getAddbutton() {
+        return addbutton;
+    }
+
+    public JMenuItem getContentsMenuItem() {
+        return contentsMenuItem;
+    }
+
+    public JMenuItem getCopyMenuItem() {
+        return copyMenuItem;
+    }
+
+    public JMenuItem getCutMenuItem() {
+        return cutMenuItem;
+    }
+
+    public JMenuItem getDeleteMenuItem() {
+        return deleteMenuItem;
+    }
+
+    public JMenu getEditMenu() {
+        return editMenu;
+    }
+
+    public JMenuItem getExitMenuItem() {
+        return exitMenuItem;
+    }
+
+    public JMenu getFileMenu() {
+        return fileMenu;
+    }
+
+    public JMenu getHelpMenu() {
+        return helpMenu;
+    }
+
+    public JMenuItem getOpenMenuItem() {
+        return openMenuItem;
+    }
+
+    public JMenuItem getPasteMenuItem() {
+        return pasteMenuItem;
+    }
+
+    public JTable getReftable() {
+        return reftable;
+    }
+
+    public JButton getRemovebutton() {
+        return removebutton;
+    }
+
+    public JMenuItem getSaveAsMenuItem() {
+        return saveAsMenuItem;
+    }
+
+    public JMenuItem getSaveMenuItem() {
+        return saveMenuItem;
+    }
+
+    public JScrollPane getScrollpane() {
+        return scrollpane;
+    }
+    
+    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JButton addbutton;
@@ -276,9 +376,11 @@ public class BibSwingApp extends javax.swing.JFrame {
     private javax.swing.JMenuItem cutMenuItem;
     private javax.swing.JMenuItem deleteMenuItem;
     private javax.swing.JMenu editMenu;
+    private javax.swing.JComboBox entrytype;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;
@@ -289,4 +391,6 @@ public class BibSwingApp extends javax.swing.JFrame {
     private javax.swing.JScrollPane scrollpane;
     // End of variables declaration//GEN-END:variables
 
+    
+    
 }
