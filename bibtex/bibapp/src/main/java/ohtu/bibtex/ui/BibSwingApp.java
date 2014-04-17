@@ -20,7 +20,7 @@ public class BibSwingApp extends javax.swing.JFrame {
     private File editedFile;
     final String[] columnNames = {"citekey", "type", "author", "title", "publisher", "year",
         "volume", "series", "address", "edition", "month", "note",
-        "key", "journal", "number", "pages", "booktitle", "edito",
+        "key", "journal", "number", "pages", "booktitle", "editor",
         "organization"};
 
     final Object[][] emptyData = new Object[1][19];
@@ -42,13 +42,16 @@ public class BibSwingApp extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         scrollpane = new javax.swing.JScrollPane();
         reftable = new javax.swing.JTable();
+        reftable.getTableHeader().setReorderingAllowed(false);
         addbutton = new javax.swing.JButton();
         removebutton = new javax.swing.JButton();
         entrytype = new javax.swing.JComboBox();
-        jLabel1 = new javax.swing.JLabel();
+        previewpane = new javax.swing.JScrollPane();
+        previewtext = new javax.swing.JTextArea();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -65,6 +68,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         scrollpane.setPreferredSize(new java.awt.Dimension(0, 0));
 
@@ -74,12 +78,31 @@ public class BibSwingApp extends javax.swing.JFrame {
         );
         scrollpane.setViewportView(reftable);
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 537;
+        gridBagConstraints.ipady = 225;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
+        getContentPane().add(scrollpane, gridBagConstraints);
+
         addbutton.setText("Add entry");
         addbutton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addbuttonActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 1, 0);
+        getContentPane().add(addbutton, gridBagConstraints);
 
         removebutton.setText("Remove entry");
         removebutton.addActionListener(new java.awt.event.ActionListener() {
@@ -87,10 +110,33 @@ public class BibSwingApp extends javax.swing.JFrame {
                 removebuttonActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 6, 0, 0);
+        getContentPane().add(removebutton, gridBagConstraints);
 
         entrytype.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Article", "Book", "Booklet", "Conference", "Inbook", "Incollection", "Inproceedings", "Manual", "Phdthesis", "Proceedings", "Techreport", "Unpublished" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = -2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 3, 0, 0);
+        getContentPane().add(entrytype, gridBagConstraints);
 
-        jLabel1.setText("Type:");
+        previewtext.setColumns(20);
+        previewtext.setRows(5);
+        previewtext.setMinimumSize(new java.awt.Dimension(100, 15));
+        previewpane.setViewportView(previewtext);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        getContentPane().add(previewpane, gridBagConstraints);
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -169,34 +215,6 @@ public class BibSwingApp extends javax.swing.JFrame {
         menuBar.add(helpMenu);
 
         setJMenuBar(menuBar);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(addbutton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(removebutton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(3, 3, 3)
-                .addComponent(entrytype, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(85, 85, 85))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addbutton)
-                    .addComponent(removebutton)
-                    .addComponent(entrytype, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -380,10 +398,11 @@ public class BibSwingApp extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;
+    private javax.swing.JScrollPane previewpane;
+    private javax.swing.JTextArea previewtext;
     private javax.swing.JTable reftable;
     private javax.swing.JButton removebutton;
     private javax.swing.JMenuItem saveAsMenuItem;
