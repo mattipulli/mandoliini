@@ -284,21 +284,29 @@ public class BibSwingApp extends javax.swing.JFrame {
         int selectedrow = reftable.getSelectedRow();
         int colcount = reftable.getColumnCount();
         int rowcount = reftable.getSelectedRowCount();
+        // If a row is selected
         if (selectedrow != -1) {
             Object[] names = new String[colcount];
             Object[][] data = new Object[rowcount][names.length];
+            
+            // Counter for rows
             int i = 0;
+            
+            // Collect column names in array
             for (int col = 0; col < colcount; col++) {
                 names[col] = reftable.getColumnName(col);
             }
 
+            // Collect data from selected rows into array
             for (int sel : reftable.getSelectedRows()) {
                 for (int col = 0; col < colcount; col++) {
                     data[i][col] = reftable.getValueAt(sel, col);
                 }
+                // Next row
                 i++;
             }
-
+            
+            // Create new DefaultTableModel and convert it to text
             selected = new DefaultTableModel(data, names);
             BibDatabase db = ConvertTable.tableToBib(selected);
             previewtext.setText(db.formatDatabase());
