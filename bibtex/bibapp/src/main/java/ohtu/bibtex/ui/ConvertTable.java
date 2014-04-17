@@ -40,7 +40,7 @@ public class ConvertTable {
         // Collect unique field names and count them
         for (BibTeXEntry b : allentries) {
             for (Key k : b.getFields().keySet()) {
-                String field = k.toString();
+                String field = k.toString().toLowerCase();
                 if (!fieldnames.contains(field)) {
                     fieldnames.add(field);
                 }
@@ -58,7 +58,7 @@ public class ConvertTable {
         for (BibTeXEntry entry : allentries) {
             // Store their cite key and type as first two fields
             data[i][0] = entry.getKey().toString();
-            data[i][1] = entry.getType().toString();
+            data[i][1] = entry.getType().toString().toLowerCase();
             // Start with first field
             j = 0;
             // For all fields in an entry
@@ -107,7 +107,7 @@ public class ConvertTable {
                 }
                 // Read type from *SECOND* column
                 if (model.getValueAt(i, 1) != null && !model.getValueAt(i, 1).toString().trim().equals("")) {
-                    type = new Key(model.getValueAt(i, 1).toString().trim());
+                    type = new Key(model.getValueAt(i, 1).toString().trim().toLowerCase());
                 }
             }
 

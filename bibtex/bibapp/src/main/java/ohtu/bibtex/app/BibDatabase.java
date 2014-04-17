@@ -96,6 +96,17 @@ public final class BibDatabase {
             Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "Failed to write database", ex);
         }
     }
+    
+    public String formatDatabase() {
+        Writer writer = new StringWriter();
+        org.jbibtex.BibTeXFormatter bibtexFormatter = new org.jbibtex.BibTeXFormatter();
+        try {
+            bibtexFormatter.format(database, writer);
+        } catch (IOException ex) {
+            Logger.getLogger(BibDatabase.class.getName()).log(Level.SEVERE, "Failed to format database", ex);
+        }
+        return writer.toString();
+    }
 
     /**
      * Print out the reference database in BibTeX format (for testing)

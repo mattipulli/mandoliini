@@ -9,6 +9,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import ohtu.bibtex.app.BibDatabase;
 
 /**
@@ -52,6 +53,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         entrytype = new javax.swing.JComboBox();
         previewpane = new javax.swing.JScrollPane();
         previewtext = new javax.swing.JTextArea();
+        previewbutton = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -137,6 +139,14 @@ public class BibSwingApp extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         getContentPane().add(previewpane, gridBagConstraints);
+
+        previewbutton.setText("Preview selected");
+        previewbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                previewbuttonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(previewbutton, new java.awt.GridBagConstraints());
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -269,6 +279,32 @@ public class BibSwingApp extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_saveAsMenuItemActionPerformed
 
+    private void previewbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previewbuttonActionPerformed
+        DefaultTableModel selected;
+        int selectedrow = reftable.getSelectedRow();
+        int colcount = reftable.getColumnCount();
+        int rowcount = reftable.getSelectedRowCount();
+        if (selectedrow != -1) {
+            Object[] names = new String[colcount];
+            Object[][] data = new Object[rowcount][names.length];
+            int i = 0;
+            for (int col = 0; col < colcount; col++) {
+                names[col] = reftable.getColumnName(col);
+            }
+
+            for (int sel : reftable.getSelectedRows()) {
+                for (int col = 0; col < colcount; col++) {
+                    data[i][col] = reftable.getValueAt(sel, col);
+                }
+                i++;
+            }
+
+            selected = new DefaultTableModel(data, names);
+            BibDatabase db = ConvertTable.tableToBib(selected);
+            previewtext.setText(db.formatDatabase());
+        }
+    }//GEN-LAST:event_previewbuttonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -383,8 +419,7 @@ public class BibSwingApp extends javax.swing.JFrame {
     public JScrollPane getScrollpane() {
         return scrollpane;
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
@@ -401,6 +436,7 @@ public class BibSwingApp extends javax.swing.JFrame {
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;
+    private javax.swing.JButton previewbutton;
     private javax.swing.JScrollPane previewpane;
     private javax.swing.JTextArea previewtext;
     private javax.swing.JTable reftable;
@@ -410,6 +446,4 @@ public class BibSwingApp extends javax.swing.JFrame {
     private javax.swing.JScrollPane scrollpane;
     // End of variables declaration//GEN-END:variables
 
-    
-    
 }
