@@ -1,7 +1,11 @@
 package ohtu.bibtex.ui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -11,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.text.DefaultEditorKit;
 import ohtu.bibtex.app.BibDatabase;
 
 /**
@@ -27,15 +32,23 @@ public class BibSwingApp extends javax.swing.JFrame {
 
     final Object[][] emptyData = new Object[1][19];
     private TableModel originaltable;
+    // Some defined actions to bind to buttons and menu items
+    Action addentryaction;
+    Action removeentryaction;
 
     /**
      * Creates new form BibSwingApp
      */
     public BibSwingApp() {
+        // Instantiate actions, probably should be done elsewhere
+        addentryaction = new AddEntry();
+        removeentryaction = new RemoveEntry();
+        // Init form components
         initComponents();
+        // Set empty table as "original"
         originaltable = editedtable.getModel();
-        updateStatusbar("Welcome to BibSwingApp");
         // Show some minimal help
+        updateStatusbar("Welcome to BibSwingApp");
         showHelp();
     }
 
@@ -49,7 +62,6 @@ public class BibSwingApp extends javax.swing.JFrame {
                 + "* Append adds selected entries into preview panel\n"
                 + "* Saving saves *ONLY* currently filtered (visible) table contents\n"
                 + "* If you don't want that, clear the filter before saving by filtering for an empty string\n");
-
     }
 
     /**
@@ -65,8 +77,8 @@ public class BibSwingApp extends javax.swing.JFrame {
         scrollpane = new javax.swing.JScrollPane();
         editedtable = new javax.swing.JTable();
         editedtable.getTableHeader().setReorderingAllowed(false);
-        addbutton = new javax.swing.JButton();
-        removebutton = new javax.swing.JButton();
+        addbutton = new javax.swing.JButton(addentryaction);
+        removebutton = new javax.swing.JButton(removeentryaction);
         entrytype = new javax.swing.JComboBox();
         previewpane = new javax.swing.JScrollPane();
         previewtext = new javax.swing.JTextArea();
@@ -82,12 +94,12 @@ public class BibSwingApp extends javax.swing.JFrame {
         saveAsMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
-        cutMenuItem = new javax.swing.JMenuItem();
-        copyMenuItem = new javax.swing.JMenuItem();
-        pasteMenuItem = new javax.swing.JMenuItem();
-        deleteMenuItem = new javax.swing.JMenuItem();
+        cutMenuItem = new javax.swing.JMenuItem(new DefaultEditorKit.CutAction());
+        copyMenuItem = new javax.swing.JMenuItem(new DefaultEditorKit.CopyAction());
+        pasteMenuItem = new javax.swing.JMenuItem(new DefaultEditorKit.PasteAction());
+        addentrymenuitem = new javax.swing.JMenuItem(addentryaction);
+        deleteentrymenuitem = new javax.swing.JMenuItem(removeentryaction);
         helpMenu = new javax.swing.JMenu();
-        contentsMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -115,11 +127,6 @@ public class BibSwingApp extends javax.swing.JFrame {
         getContentPane().add(scrollpane, gridBagConstraints);
 
         addbutton.setText("Add entry");
-        addbutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addbuttonActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -127,12 +134,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 1, 0);
         getContentPane().add(addbutton, gridBagConstraints);
 
-        removebutton.setText("Remove entry");
-        removebutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removebuttonActionPerformed(evt);
-            }
-        });
+        removebutton.setText("Delete selected");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -210,6 +212,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
 
+        openMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         openMenuItem.setMnemonic('o');
         openMenuItem.setText("Open");
         openMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -219,6 +222,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         });
         fileMenu.add(openMenuItem);
 
+        saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         saveMenuItem.setMnemonic('s');
         saveMenuItem.setText("Save");
         saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -238,6 +242,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         });
         fileMenu.add(saveAsMenuItem);
 
+        exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
         exitMenuItem.setMnemonic('x');
         exitMenuItem.setText("Exit");
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -252,33 +257,47 @@ public class BibSwingApp extends javax.swing.JFrame {
         editMenu.setMnemonic('e');
         editMenu.setText("Edit");
 
+        cutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
         cutMenuItem.setMnemonic('t');
         cutMenuItem.setText("Cut");
         editMenu.add(cutMenuItem);
 
+        copyMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
         copyMenuItem.setMnemonic('y');
         copyMenuItem.setText("Copy");
         editMenu.add(copyMenuItem);
 
+        pasteMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_MASK));
         pasteMenuItem.setMnemonic('p');
         pasteMenuItem.setText("Paste");
         editMenu.add(pasteMenuItem);
 
-        deleteMenuItem.setMnemonic('d');
-        deleteMenuItem.setText("Delete");
-        editMenu.add(deleteMenuItem);
+        addentrymenuitem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        addentrymenuitem.setMnemonic('d');
+        addentrymenuitem.setText("Add entry");
+        addentrymenuitem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addentrymenuitemActionPerformed(evt);
+            }
+        });
+        editMenu.add(addentrymenuitem);
+
+        deleteentrymenuitem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
+        deleteentrymenuitem.setText("Delete selected");
+        editMenu.add(deleteentrymenuitem);
 
         menuBar.add(editMenu);
 
         helpMenu.setMnemonic('h');
         helpMenu.setText("Help");
 
-        contentsMenuItem.setMnemonic('c');
-        contentsMenuItem.setText("Contents");
-        helpMenu.add(contentsMenuItem);
-
         aboutMenuItem.setMnemonic('a');
-        aboutMenuItem.setText("About");
+        aboutMenuItem.setText("Quick help");
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutMenuItemActionPerformed(evt);
+            }
+        });
         helpMenu.add(aboutMenuItem);
 
         menuBar.add(helpMenu);
@@ -304,20 +323,52 @@ public class BibSwingApp extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
-    private void addbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbuttonActionPerformed
-        DefaultTableModel model = (DefaultTableModel) editedtable.getModel();
-        String type = (String) entrytype.getSelectedObjects()[0];
-        model.addRow(new Object[][]{});
-        int rowindex = model.getRowCount() - 1;
-        // Generate some random cite key
-        model.setValueAt(nextCitekey(type), rowindex, 0);
-        // Set entry type automatically for the row (second field)
-        model.setValueAt(type, rowindex, 1);
-        updateStatusbar("Added " + type + " entry");
-        // Focus Author field
-        editedtable.requestFocus();
-        editedtable.editCellAt(rowindex, 2);
-    }//GEN-LAST:event_addbuttonActionPerformed
+    private class AddEntry extends AbstractAction {
+
+        public AddEntry() {
+            super("Add an entry", null);
+            putValue(SHORT_DESCRIPTION, "Adds a new entry row with the chosen type");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            DefaultTableModel model = (DefaultTableModel) editedtable.getModel();
+            String type = (String) entrytype.getSelectedObjects()[0];
+            model.addRow(new Object[][]{});
+            int rowindex = model.getRowCount() - 1;
+            // Generate some random cite key
+            model.setValueAt(nextCitekey(type), rowindex, 0);
+            // Set entry type automatically for the row (second field)
+            model.setValueAt(type, rowindex, 1);
+            updateStatusbar("Added " + type + " entry");
+            // Focus Author field
+            editedtable.requestFocus();
+            editedtable.editCellAt(rowindex, 2);
+        }
+    }
+
+    private class RemoveEntry extends AbstractAction {
+
+        public RemoveEntry() {
+            super("Remove an entry", null);
+            putValue(SHORT_DESCRIPTION, "Removes the selected entries");
+//            putValue(MNEMONIC_KEY, new Integer(KeyEvent.VK_L));
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int num = 0;
+            if (editedtable.getSelectedRow() == -1) {
+                updateStatusbar("No entry selected for removal");
+            } else {
+                while (editedtable.getSelectedRow() != -1) {
+                    ((DefaultTableModel) editedtable.getModel()).removeRow(editedtable.getSelectedRow());
+                    num++;
+                }
+                updateStatusbar("Removed " + num + " " + (num > 1 ? "entries" : "entry"));
+            }
+        }
+    }
 
     /**
      * Return next free cite key of the form <Citetype><index>, eg. "Article2",
@@ -349,19 +400,6 @@ public class BibSwingApp extends javax.swing.JFrame {
         }
         return false;
     }
-
-    private void removebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removebuttonActionPerformed
-        int num = 0;
-        if (editedtable.getSelectedRow() == -1) {
-            updateStatusbar("No entry selected for removal");
-        } else {
-            while (editedtable.getSelectedRow() != -1) {
-                ((DefaultTableModel) editedtable.getModel()).removeRow(editedtable.getSelectedRow());
-                num++;
-            }
-            updateStatusbar("Removed " + num + " " + (num > 1 ? "entries" : "entry"));
-        }
-    }//GEN-LAST:event_removebuttonActionPerformed
 
     private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
         JFileChooser fc = selectFile();
@@ -546,6 +584,14 @@ public class BibSwingApp extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_appendbuttonActionPerformed
 
+    private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
+        showHelp();
+    }//GEN-LAST:event_aboutMenuItemActionPerformed
+
+    private void addentrymenuitemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addentrymenuitemActionPerformed
+
+    }//GEN-LAST:event_addentrymenuitemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -575,6 +621,7 @@ public class BibSwingApp extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new BibSwingApp().setVisible(true);
 
@@ -602,10 +649,6 @@ public class BibSwingApp extends javax.swing.JFrame {
         return addbutton;
     }
 
-    public JMenuItem getContentsMenuItem() {
-        return contentsMenuItem;
-    }
-
     public JMenuItem getCopyMenuItem() {
         return copyMenuItem;
     }
@@ -615,7 +658,7 @@ public class BibSwingApp extends javax.swing.JFrame {
     }
 
     public JMenuItem getDeleteMenuItem() {
-        return deleteMenuItem;
+        return addentrymenuitem;
     }
 
     public JMenu getEditMenu() {
@@ -666,11 +709,11 @@ public class BibSwingApp extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JButton addbutton;
+    private javax.swing.JMenuItem addentrymenuitem;
     private javax.swing.JButton appendbutton;
-    private javax.swing.JMenuItem contentsMenuItem;
     private javax.swing.JMenuItem copyMenuItem;
     private javax.swing.JMenuItem cutMenuItem;
-    private javax.swing.JMenuItem deleteMenuItem;
+    private javax.swing.JMenuItem deleteentrymenuitem;
     private javax.swing.JMenu editMenu;
     private javax.swing.JTable editedtable;
     private javax.swing.JComboBox entrytype;
