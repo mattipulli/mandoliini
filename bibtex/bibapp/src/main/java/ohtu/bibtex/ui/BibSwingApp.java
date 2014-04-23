@@ -36,11 +36,20 @@ public class BibSwingApp extends javax.swing.JFrame {
         originaltable = editedtable.getModel();
         updateStatusbar("Welcome to BibSwingApp");
         // Show some minimal help
-        JOptionPane.showMessageDialog(null, "* Select rows with Shift / Ctrl\n"
+        showHelp();
+    }
+    
+    /**
+     * Help pop-up
+     */
+    private void showHelp() {
+        JOptionPane.showMessageDialog(null, "--- BibSwingApp ---\n\n"
+                + "* Select rows with Shift / Ctrl\n"
                 + "* Preview will format selected entries into BibTeX (preview panel)\n"
                 + "* Append adds selected entries into preview panel\n"
                 + "* Saving saves *ONLY* currently filtered (visible) table contents\n"
                 + "* If you don't want that, clear the filter before saving by filtering for an empty string\n");
+        
     }
 
     /**
@@ -297,10 +306,47 @@ public class BibSwingApp extends javax.swing.JFrame {
 
     private void addbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbuttonActionPerformed
         DefaultTableModel model = (DefaultTableModel) editedtable.getModel();
+        String type = (String)entrytype.getSelectedObjects()[0];
         model.addRow(new Object[][]{});
-        updateStatusbar("Added entry");
+        int rowindex = model.getRowCount()-1;
+        // Generate some random cite key
+        model.setValueAt(nextCitekey(type), rowindex, 0);
+        // Set entry type automatically for the row (second field)
+        model.setValueAt(type, rowindex, 1);
+        updateStatusbar("Added " + type + " entry");
+        // Focus Author field
+        editedtable.requestFocus();
+        editedtable.editCellAt(rowindex, 2);
     }//GEN-LAST:event_addbuttonActionPerformed
 
+    /**
+     * Return next free cite key of the form <Citetype><index>, eg. "Article2", "Book4" etc.
+     * @param type type of the cite (Article, Book etc.)
+     * @return 
+     */
+    private String nextCitekey (String type) {
+        int n = 1;
+        while(citekeyExists(type + n)) {
+            n++;
+        }
+        return type + n;
+    }
+    
+    /**
+     * Check if a certain cite key already exists in some row
+     * @param key cite key string
+     * @return 
+     */
+    private boolean citekeyExists(String key) {
+        for(int i = 0; i < editedtable.getRowCount(); i++) {
+            Object current = editedtable.getValueAt(i, 0);
+            if(current != null && current.equals(key)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     private void removebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removebuttonActionPerformed
         if (editedtable.getSelectedRow() != -1) {
             ((DefaultTableModel) editedtable.getModel()).removeRow(editedtable.getSelectedRow());
