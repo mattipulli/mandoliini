@@ -282,7 +282,9 @@ public class BibSwingApp extends javax.swing.JFrame {
         editMenu.add(addentrymenuitem);
 
         removeentrymenuitem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
+        removeentrymenuitem.setMnemonic('r');
         removeentrymenuitem.setText("Remove selected");
+        removeentrymenuitem.setToolTipText("Removes the selected entries");
         editMenu.add(removeentrymenuitem);
 
         menuBar.add(editMenu);
