@@ -38,7 +38,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         // Show some minimal help
         showHelp();
     }
-    
+
     /**
      * Help pop-up
      */
@@ -49,7 +49,7 @@ public class BibSwingApp extends javax.swing.JFrame {
                 + "* Append adds selected entries into preview panel\n"
                 + "* Saving saves *ONLY* currently filtered (visible) table contents\n"
                 + "* If you don't want that, clear the filter before saving by filtering for an empty string\n");
-        
+
     }
 
     /**
@@ -306,9 +306,9 @@ public class BibSwingApp extends javax.swing.JFrame {
 
     private void addbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbuttonActionPerformed
         DefaultTableModel model = (DefaultTableModel) editedtable.getModel();
-        String type = (String)entrytype.getSelectedObjects()[0];
+        String type = (String) entrytype.getSelectedObjects()[0];
         model.addRow(new Object[][]{});
-        int rowindex = model.getRowCount()-1;
+        int rowindex = model.getRowCount() - 1;
         // Generate some random cite key
         model.setValueAt(nextCitekey(type), rowindex, 0);
         // Set entry type automatically for the row (second field)
@@ -320,39 +320,46 @@ public class BibSwingApp extends javax.swing.JFrame {
     }//GEN-LAST:event_addbuttonActionPerformed
 
     /**
-     * Return next free cite key of the form <Citetype><index>, eg. "Article2", "Book4" etc.
+     * Return next free cite key of the form <Citetype><index>, eg. "Article2",
+     * "Book4" etc.
+     *
      * @param type type of the cite (Article, Book etc.)
-     * @return 
+     * @return
      */
-    private String nextCitekey (String type) {
+    private String nextCitekey(String type) {
         int n = 1;
-        while(citekeyExists(type + n)) {
+        while (citekeyExists(type + n)) {
             n++;
         }
         return type + n;
     }
-    
+
     /**
      * Check if a certain cite key already exists in some row
+     *
      * @param key cite key string
-     * @return 
+     * @return
      */
     private boolean citekeyExists(String key) {
-        for(int i = 0; i < editedtable.getRowCount(); i++) {
+        for (int i = 0; i < editedtable.getRowCount(); i++) {
             Object current = editedtable.getValueAt(i, 0);
-            if(current != null && current.equals(key)) {
+            if (current != null && current.equals(key)) {
                 return true;
             }
         }
         return false;
     }
-    
+
     private void removebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removebuttonActionPerformed
-        if (editedtable.getSelectedRow() != -1) {
-            ((DefaultTableModel) editedtable.getModel()).removeRow(editedtable.getSelectedRow());
-            updateStatusbar("Removed entry");
-        } else {
+        int num = 0;
+        if (editedtable.getSelectedRow() == -1) {
             updateStatusbar("No entry selected for removal");
+        } else {
+            while (editedtable.getSelectedRow() != -1) {
+                ((DefaultTableModel) editedtable.getModel()).removeRow(editedtable.getSelectedRow());
+                num++;
+            }
+            updateStatusbar("Removed " + num + " " + (num > 1 ? "entries" : "entry"));
         }
     }//GEN-LAST:event_removebuttonActionPerformed
 
@@ -466,8 +473,9 @@ public class BibSwingApp extends javax.swing.JFrame {
 
     /**
      * Show visible/total row count and custom message in statusbar
+     *
      * @param msg message
-     */    
+     */
     private void updateStatusbar(String msg) {
         statusbar.setText("");
         if (editedtable != null && originaltable != null) {
