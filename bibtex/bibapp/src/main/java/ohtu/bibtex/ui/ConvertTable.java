@@ -16,42 +16,6 @@ import org.jbibtex.Value;
  * Conversion functions to populate a Swing TablePane with .bib and vice versa
  */
 public class ConvertTable {
-    
-    public static void collectUniqueFieldNames(ArrayList<String> fieldnames, ArrayList<BibTeXEntry> allentries) {
-        for (BibTeXEntry b : allentries) {
-            for (Key k : b.getFields().keySet()) {
-                String field = k.toString();
-                if (!fieldnames.contains(field)) {
-                    fieldnames.add(field);
-                }
-            }
-        }
-    }
-
-    public static void iterateTroughAllEntries(Object[][] data, ArrayList<String> fieldnames, ArrayList<BibTeXEntry> allentries) {
-        int i = 0;
-        int j;
-        for (BibTeXEntry entry : allentries) {
-            // Store their cite key and type as first two fields
-            data[i][0] = entry.getKey().toString();
-            data[i][1] = entry.getType().toString();
-            // Start with first field
-            j = 0;
-            // For all fields in an entry
-            for (String k : fieldnames) {
-                // Read their values
-                Value value = entry.getField(new Key(k));
-                // Store non-null value in array
-                if (value != null) {
-                    data[i][j] = value.toUserString();
-                }
-                // Proceed with next field
-                j++;
-            }
-            // Next entry in array
-            i++;
-        }
-    }
 
     /**
      * Convert BibDatabase to a DefaultTableModel for Swing TablePane
@@ -74,45 +38,45 @@ public class ConvertTable {
         fieldnames.add(1, "type");
 
         // Collect unique field names and count them
-        ConvertTable.collectUniqueFieldNames(fieldnames, allentries);
+        for (BibTeXEntry b : allentries) {
+            for (Key k : b.getFields().keySet()) {
+                String field = k.toString().toLowerCase();
+                if (!fieldnames.contains(field)) {
+                    fieldnames.add(field);
+                }
+            }
+        }
 
         // Store entry data
         Object[][] data = new Object[allentries.size()][fieldnames.size()];
 
         // Variables for iterating data array (i = entry, j = field in entry)
-        ConvertTable.iterateTroughAllEntries(data, fieldnames, allentries);
-        
+        int i = 0;
+        int j;
+
+        // For all entries
+        for (BibTeXEntry entry : allentries) {
+            // Store their cite key and type as first two fields
+            data[i][0] = entry.getKey().toString();
+            data[i][1] = entry.getType().toString().toLowerCase();
+            // Start with first field
+            j = 0;
+            // For all fields in an entry
+            for (String k : fieldnames) {
+                // Read their values
+                Value value = entry.getField(new Key(k));
+                // Store non-null value in array
+                if (value != null) {
+                    data[i][j] = value.toUserString();
+                }
+                // Proceed with next field
+                j++;
+            }
+            // Next entry in array
+            i++;
+        }
         // Return data and field names for TablePane
         return new DefaultTableModel(data, fieldnames.toArray());
-    }
-    
-    public static void readTwoAsCiteKeyAndType(TableModel model, Key cite, Key type, int i) {
-         // Empty cite key or type -> entry is deleted (ie. not created)
-
-        // Read cite key from *FIRST* column
-        if (model.getValueAt(i, 0) != null && !model.getValueAt(i, 0).toString().trim().equals("")) {
-            cite = new Key(model.getValueAt(i, 0).toString().trim());
-        }
-        // Read type from *SECOND* column
-        if (model.getValueAt(i, 1) != null && !model.getValueAt(i, 1).toString().trim().equals("")) {
-            type = new Key(model.getValueAt(i, 1).toString().trim());
-        }
-    }
-
-    public static void addEntryCiteKeyAndType(BibTeXEntry entry, TableModel model, Key cite, Key type, int i) {
-        // Create new entry
-        entry = new BibTeXEntry(type, cite);
-        // Iterate rest of the columns
-        for (int j = 2; j < model.getColumnCount(); j++) {
-            Key field;
-            StringValue value;
-            // Add non-empty field and value to entry
-            if (model.getValueAt(i, j) != null && !model.getValueAt(i, j).toString().trim().equals("")) {
-                field = new Key(model.getColumnName(j));
-                value = new StringValue(model.getValueAt(i, j).toString().trim(), StringValue.Style.BRACED);
-                entry.addField(field, value);
-            }
-        }
     }
 
     /**
@@ -135,12 +99,33 @@ public class ConvertTable {
 
             // If at least two columns, read the first two as cite key and type
             if (model.getColumnCount() > 1) {
-                ConvertTable.readTwoAsCiteKeyAndType(model, cite, type, i);
+                // Empty cite key or type -> entry is deleted (ie. not created)
+
+                // Read cite key from *FIRST* column
+                if (model.getValueAt(i, 0) != null && !model.getValueAt(i, 0).toString().trim().equals("")) {
+                    cite = new Key(model.getValueAt(i, 0).toString().trim());
+                }
+                // Read type from *SECOND* column
+                if (model.getValueAt(i, 1) != null && !model.getValueAt(i, 1).toString().trim().equals("")) {
+                    type = new Key(model.getValueAt(i, 1).toString().trim().toLowerCase());
+                }
             }
 
             // Add entry only if both cite key and type are non-null
             if (cite != null && type != null) {
-               ConvertTable.addEntryCiteKeyAndType(entry, model, cite, type, i);
+                // Create new entry
+                entry = new BibTeXEntry(type, cite);
+                // Iterate rest of the columns
+                for (int j = 2; j < model.getColumnCount(); j++) {
+                    Key field;
+                    StringValue value;
+                    // Add non-empty field and value to entry
+                    if (model.getValueAt(i, j) != null && !model.getValueAt(i, j).toString().trim().equals("")) {
+                        field = new Key(model.getColumnName(j));
+                        value = new StringValue(model.getValueAt(i, j).toString().trim(), StringValue.Style.BRACED);
+                        entry.addField(field, value);
+                    }
+                }
             }
 
             // Add non-null entry

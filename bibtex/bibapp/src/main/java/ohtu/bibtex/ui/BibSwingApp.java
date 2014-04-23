@@ -1,14 +1,16 @@
 package ohtu.bibtex.ui;
 
 import java.io.File;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import ohtu.bibtex.app.BibDatabase;
 
 /**
@@ -20,17 +22,33 @@ public class BibSwingApp extends javax.swing.JFrame {
     private File editedFile;
     final String[] columnNames = {"citekey", "type", "author", "title", "publisher", "year",
         "volume", "series", "address", "edition", "month", "note",
-        "key", "journal", "number", "pages", "booktitle", "edito",
+        "key", "journal", "number", "pages", "booktitle", "editor",
         "organization"};
 
     final Object[][] emptyData = new Object[1][19];
+    private TableModel originaltable;
 
     /**
      * Creates new form BibSwingApp
      */
     public BibSwingApp() {
-        //editedFile = new File("refdb.bibtex");
         initComponents();
+        originaltable = editedtable.getModel();
+        updateStatusbar("Welcome to BibSwingApp");
+        // Show some minimal help
+        showHelp();
+    }
+
+    /**
+     * Help pop-up
+     */
+    private void showHelp() {
+        JOptionPane.showMessageDialog(null, "--- BibSwingApp ---\n\n"
+                + "* Select rows with Shift / Ctrl\n"
+                + "* Preview will format selected entries into BibTeX (preview panel)\n"
+                + "* Append adds selected entries into preview panel\n"
+                + "* Saving saves *ONLY* currently filtered (visible) table contents\n"
+                + "* If you don't want that, clear the filter before saving by filtering for an empty string\n");
 
     }
 
@@ -42,13 +60,21 @@ public class BibSwingApp extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         scrollpane = new javax.swing.JScrollPane();
-        reftable = new javax.swing.JTable();
+        editedtable = new javax.swing.JTable();
+        editedtable.getTableHeader().setReorderingAllowed(false);
         addbutton = new javax.swing.JButton();
         removebutton = new javax.swing.JButton();
         entrytype = new javax.swing.JComboBox();
-        jLabel1 = new javax.swing.JLabel();
+        previewpane = new javax.swing.JScrollPane();
+        previewtext = new javax.swing.JTextArea();
+        previewbutton = new javax.swing.JButton();
+        filterfield = new javax.swing.JTextField();
+        filterbutton = new javax.swing.JButton();
+        appendbutton = new javax.swing.JButton();
+        statusbar = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -65,14 +91,28 @@ public class BibSwingApp extends javax.swing.JFrame {
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         scrollpane.setPreferredSize(new java.awt.Dimension(0, 0));
 
-        reftable.setModel(
+        editedtable.setModel(
             //ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath()))
             new DefaultTableModel(emptyData, columnNames)
         );
-        scrollpane.setViewportView(reftable);
+        scrollpane.setViewportView(editedtable);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 537;
+        gridBagConstraints.ipady = 225;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
+        getContentPane().add(scrollpane, gridBagConstraints);
 
         addbutton.setText("Add entry");
         addbutton.addActionListener(new java.awt.event.ActionListener() {
@@ -80,6 +120,12 @@ public class BibSwingApp extends javax.swing.JFrame {
                 addbuttonActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 1, 0);
+        getContentPane().add(addbutton, gridBagConstraints);
 
         removebutton.setText("Remove entry");
         removebutton.addActionListener(new java.awt.event.ActionListener() {
@@ -87,10 +133,79 @@ public class BibSwingApp extends javax.swing.JFrame {
                 removebuttonActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 6, 0, 0);
+        getContentPane().add(removebutton, gridBagConstraints);
 
         entrytype.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Article", "Book", "Booklet", "Conference", "Inbook", "Incollection", "Inproceedings", "Manual", "Phdthesis", "Proceedings", "Techreport", "Unpublished" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = -2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 3, 0, 0);
+        getContentPane().add(entrytype, gridBagConstraints);
 
-        jLabel1.setText("Type:");
+        previewtext.setEditable(false);
+        previewtext.setColumns(20);
+        previewtext.setRows(5);
+        previewtext.setMinimumSize(new java.awt.Dimension(100, 15));
+        previewpane.setViewportView(previewtext);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        getContentPane().add(previewpane, gridBagConstraints);
+
+        previewbutton.setText("Preview selected");
+        previewbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                previewbuttonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(previewbutton, new java.awt.GridBagConstraints());
+
+        filterfield.setToolTipText("Filter text...");
+        filterfield.setMinimumSize(new java.awt.Dimension(250, 24));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        getContentPane().add(filterfield, gridBagConstraints);
+        filterfield.getAccessibleContext().setAccessibleName("");
+
+        filterbutton.setText("Filter");
+        filterbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterbuttonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        getContentPane().add(filterbutton, gridBagConstraints);
+
+        appendbutton.setText("Append selected");
+        appendbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                appendbuttonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(appendbutton, new java.awt.GridBagConstraints());
+
+        statusbar.setMaximumSize(new java.awt.Dimension(32767, 32767));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        getContentPane().add(statusbar, gridBagConstraints);
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -170,34 +285,6 @@ public class BibSwingApp extends javax.swing.JFrame {
 
         setJMenuBar(menuBar);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(addbutton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(removebutton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(3, 3, 3)
-                .addComponent(entrytype, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(85, 85, 85))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addbutton)
-                    .addComponent(removebutton)
-                    .addComponent(entrytype, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
-        );
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -206,22 +293,73 @@ public class BibSwingApp extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
-        BibDatabase db = ConvertTable.tableToBib(reftable.getModel());
+        BibDatabase db = ConvertTable.tableToBib(editedtable.getModel());
         if (editedFile != null) {
-            db.saveDatabase(editedFile.getAbsolutePath());
+            String path = editedFile.getAbsolutePath();
+            db.saveDatabase(path);
             // Reload modified file into table to reflect changes
-            reftable.setModel(ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath())));
+            editedtable.setModel(ConvertTable.bibToTable(new BibDatabase(path)));
+            originaltable = editedtable.getModel();
+            updateStatusbar("Saved " + path);
         }
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
     private void addbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbuttonActionPerformed
-        DefaultTableModel model = (DefaultTableModel) reftable.getModel();
+        DefaultTableModel model = (DefaultTableModel) editedtable.getModel();
+        String type = (String) entrytype.getSelectedObjects()[0];
         model.addRow(new Object[][]{});
+        int rowindex = model.getRowCount() - 1;
+        // Generate some random cite key
+        model.setValueAt(nextCitekey(type), rowindex, 0);
+        // Set entry type automatically for the row (second field)
+        model.setValueAt(type, rowindex, 1);
+        updateStatusbar("Added " + type + " entry");
+        // Focus Author field
+        editedtable.requestFocus();
+        editedtable.editCellAt(rowindex, 2);
     }//GEN-LAST:event_addbuttonActionPerformed
 
+    /**
+     * Return next free cite key of the form <Citetype><index>, eg. "Article2",
+     * "Book4" etc.
+     *
+     * @param type type of the cite (Article, Book etc.)
+     * @return
+     */
+    private String nextCitekey(String type) {
+        int n = 1;
+        while (citekeyExists(type + n)) {
+            n++;
+        }
+        return type + n;
+    }
+
+    /**
+     * Check if a certain cite key already exists in some row
+     *
+     * @param key cite key string
+     * @return
+     */
+    private boolean citekeyExists(String key) {
+        for (int i = 0; i < editedtable.getRowCount(); i++) {
+            Object current = editedtable.getValueAt(i, 0);
+            if (current != null && current.equals(key)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void removebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removebuttonActionPerformed
-        while (reftable.getSelectedRow() != -1) {
-            ((DefaultTableModel) reftable.getModel()).removeRow(reftable.getSelectedRow());
+        int num = 0;
+        if (editedtable.getSelectedRow() == -1) {
+            updateStatusbar("No entry selected for removal");
+        } else {
+            while (editedtable.getSelectedRow() != -1) {
+                ((DefaultTableModel) editedtable.getModel()).removeRow(editedtable.getSelectedRow());
+                num++;
+            }
+            updateStatusbar("Removed " + num + " " + (num > 1 ? "entries" : "entry"));
         }
     }//GEN-LAST:event_removebuttonActionPerformed
 
@@ -230,7 +368,10 @@ public class BibSwingApp extends javax.swing.JFrame {
         int returnVal = fc.showOpenDialog(BibSwingApp.this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             editedFile = fc.getSelectedFile();
-            reftable.setModel(ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath())));
+            String path = editedFile.getAbsolutePath();
+            editedtable.setModel(ConvertTable.bibToTable(new BibDatabase(path)));
+            originaltable = editedtable.getModel();
+            updateStatusbar("Opened " + path);
         }
     }//GEN-LAST:event_openMenuItemActionPerformed
 
@@ -244,12 +385,166 @@ public class BibSwingApp extends javax.swing.JFrame {
         int returnVal = fc.showOpenDialog(BibSwingApp.this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             editedFile = fc.getSelectedFile();
-            BibDatabase db = ConvertTable.tableToBib(reftable.getModel());
-            db.saveDatabase(editedFile.getAbsolutePath());
+            BibDatabase db = ConvertTable.tableToBib(editedtable.getModel());
+            String path = editedFile.getAbsolutePath();
+            db.saveDatabase(path);
             // Reload modified file into table to reflect changes
-            reftable.setModel(ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath())));
+            editedtable.setModel(ConvertTable.bibToTable(new BibDatabase(path)));
+            originaltable = editedtable.getModel();
+            updateStatusbar("Saved " + path);
         }
     }//GEN-LAST:event_saveAsMenuItemActionPerformed
+
+    /**
+     * Return table model that includes only the chosen row indices
+     *
+     * @param table new table model
+     * @param rows rows to be selected, int array of row index numbers
+     * @return
+     */
+    private DefaultTableModel getOnlyRows(TableModel table, int[] rows) {
+        int colcount = table.getColumnCount();
+        int rowcount = table.getRowCount();
+        Object[] names = new String[colcount];
+        Object[][] data = new Object[rows.length][names.length];
+        if (rows.length > 0 && rowcount > 0) {
+
+            // Collect column names in array
+            for (int col = 0; col < colcount; col++) {
+                names[col] = table.getColumnName(col);
+            }
+            int i = 0;
+
+            // Store next chosen row index
+            for (int r : rows) {
+                for (int col = 0; col < colcount; col++) {
+                    data[i][col] = table.getValueAt(r, col);
+                }
+                // Next row
+                i++;
+            }
+        }
+        return new DefaultTableModel(data, names);
+    }
+
+    /**
+     * Return BibTeX formatted string of the selected rows
+     *
+     * @return
+     */
+    private String previewText() {
+        DefaultTableModel selected;
+        int selectedrow = editedtable.getSelectedRow();
+        int colcount = editedtable.getColumnCount();
+        int rowcount = editedtable.getSelectedRowCount();
+        // If a row is selected
+        if (selectedrow != -1) {
+            Object[] names = new String[colcount];
+            Object[][] data = new Object[rowcount][names.length];
+
+            // Counter for rows
+            int i = 0;
+
+            // Collect column names in array
+            for (int col = 0; col < colcount; col++) {
+                names[col] = editedtable.getColumnName(col);
+            }
+
+            // Collect data from selected rows into array
+            for (int sel : editedtable.getSelectedRows()) {
+                for (int col = 0; col < colcount; col++) {
+                    data[i][col] = editedtable.getValueAt(sel, col);
+                }
+                // Next row
+                i++;
+            }
+
+            // Create new DefaultTableModel and convert it to text
+            selected = new DefaultTableModel(data, names);
+            BibDatabase db = ConvertTable.tableToBib(selected);
+            return db.formatDatabase();
+        }
+        return null;
+    }
+
+    private void previewbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previewbuttonActionPerformed
+        previewtext.setText(previewText());
+    }//GEN-LAST:event_previewbuttonActionPerformed
+
+    /**
+     * Show visible/total row count and custom message in statusbar
+     *
+     * @param msg message
+     */
+    private void updateStatusbar(String msg) {
+        statusbar.setText("");
+        if (editedtable != null && originaltable != null) {
+            statusbar.setText("[" + editedtable.getRowCount() + "/" + originaltable.getRowCount() + "]");
+        }
+        statusbar.setText(statusbar.getText() + msg);
+    }
+
+    /**
+     * Filter table by string
+     *
+     * @param evt
+     */
+    private void filterbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterbuttonActionPerformed
+        // If no "original state" has been recorded (after Open/Save), record it now
+        if (originaltable == null) {
+            originaltable = editedtable.getModel();
+        }
+        int colcount = originaltable.getColumnCount();
+        int rowcount = originaltable.getRowCount();
+        String search = filterfield.getText().trim().toLowerCase();
+
+        if (search.trim().equals("")) {
+            editedtable.setModel(originaltable);
+            updateStatusbar("Filter disabled");
+            return;
+        }
+
+        ArrayList<Integer> hits = new ArrayList();
+        // Simply find value in table and record matching rows
+        for (int row = 0; row < rowcount; row++) {
+            for (int col = 0; col < colcount; col++) {
+                Object valueAt = originaltable.getValueAt(row, col);
+                // Look for string in non-empty values
+                if (valueAt != null) {
+                    if (valueAt.toString().toLowerCase().contains(search)) {
+                        // If found, add row index to array and break to next row
+                        hits.add(row);
+                        break;
+                    }
+                }
+            }
+        }
+        // If something found
+        if (hits.size() > 0) {
+            int rows[] = new int[hits.size()];
+            // Iterate all hits and store row indices in array
+            for (int i = 0; i < rows.length; i++) {
+                rows[i] = hits.get(i);
+            }
+            // Set only rows with hits visible
+            editedtable.setModel((DefaultTableModel) getOnlyRows(originaltable, rows));
+            updateStatusbar("Filter: '" + search + "'");
+        } else {
+            updateStatusbar(" '" + search + "' not found");
+        }
+    }//GEN-LAST:event_filterbuttonActionPerformed
+
+    /**
+     * Append preview text (selected rows' BibTeX) to end of preview buffer
+     *
+     * @param evt
+     */
+    private void appendbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appendbuttonActionPerformed
+        String preview = previewText();
+        if (preview != null) {
+            previewtext.setText(previewtext.getText() + "\n\n" + preview);
+        }
+    }//GEN-LAST:event_appendbuttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -282,6 +577,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new BibSwingApp().setVisible(true);
+
             }
         });
     }
@@ -347,7 +643,7 @@ public class BibSwingApp extends javax.swing.JFrame {
     }
 
     public JTable getReftable() {
-        return reftable;
+        return editedtable;
     }
 
     public JButton getRemovebutton() {
@@ -365,32 +661,35 @@ public class BibSwingApp extends javax.swing.JFrame {
     public JScrollPane getScrollpane() {
         return scrollpane;
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JButton addbutton;
+    private javax.swing.JButton appendbutton;
     private javax.swing.JMenuItem contentsMenuItem;
     private javax.swing.JMenuItem copyMenuItem;
     private javax.swing.JMenuItem cutMenuItem;
     private javax.swing.JMenuItem deleteMenuItem;
     private javax.swing.JMenu editMenu;
+    private javax.swing.JTable editedtable;
     private javax.swing.JComboBox entrytype;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JButton filterbutton;
+    private javax.swing.JTextField filterfield;
     private javax.swing.JMenu helpMenu;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;
-    private javax.swing.JTable reftable;
+    private javax.swing.JButton previewbutton;
+    private javax.swing.JScrollPane previewpane;
+    private javax.swing.JTextArea previewtext;
     private javax.swing.JButton removebutton;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JScrollPane scrollpane;
+    private javax.swing.JLabel statusbar;
     // End of variables declaration//GEN-END:variables
 
-    
-    
 }

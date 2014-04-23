@@ -89,29 +89,34 @@ public final class BibDatabase {
         } catch (IOException ex) {
             Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "Failed to open " + filename + " for writing", ex);
         }
+        if (writer != null) {
+            try {
+                writer.write(formatDatabase());
+                writer.close();
+            } catch (IOException ex) {
+                Logger.getLogger(BibDatabase.class.getName()).log(Level.SEVERE, "Failed to write to file", ex);
+            }
+        }
+    }
+
+    public String formatDatabase() {
+        Writer writer = new StringWriter();
         org.jbibtex.BibTeXFormatter bibtexFormatter = new org.jbibtex.BibTeXFormatter();
         try {
             bibtexFormatter.format(database, writer);
         } catch (IOException ex) {
-            Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "Failed to write database", ex);
+            Logger.getLogger(BibDatabase.class.getName()).log(Level.SEVERE, "Failed to format database", ex);
         }
+        return writer.toString();
     }
 
     /**
      * Print out the reference database in BibTeX format (for testing)
      *
-     * @param db reference database
      * @param io I/O object
      */
-    public void printDatabase(BibTeXDatabase db, ConsoleIO io) {
-        Writer writer = new StringWriter();
-        org.jbibtex.BibTeXFormatter bibtexFormatter = new org.jbibtex.BibTeXFormatter();
-        try {
-            bibtexFormatter.format(db, writer);
-        } catch (IOException ex) {
-            Logger.getLogger(BibCli.class.getName()).log(Level.SEVERE, "Failed to print database", ex);
-        }
-        io.print(writer.toString());
+    public void printDatabase(ConsoleIO io) {
+        io.print(formatDatabase());
     }
-    
+
 }
