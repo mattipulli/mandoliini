@@ -1,7 +1,6 @@
 package ohtu.bibtex.ui;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
 import javax.swing.AbstractAction;
@@ -98,7 +97,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         copyMenuItem = new javax.swing.JMenuItem(new DefaultEditorKit.CopyAction());
         pasteMenuItem = new javax.swing.JMenuItem(new DefaultEditorKit.PasteAction());
         addentrymenuitem = new javax.swing.JMenuItem(addentryaction);
-        deleteentrymenuitem = new javax.swing.JMenuItem(removeentryaction);
+        removeentrymenuitem = new javax.swing.JMenuItem(removeentryaction);
         helpMenu = new javax.swing.JMenu();
         aboutMenuItem = new javax.swing.JMenuItem();
 
@@ -134,7 +133,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 1, 0);
         getContentPane().add(addbutton, gridBagConstraints);
 
-        removebutton.setText("Delete selected");
+        removebutton.setText("Remove selected");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -282,9 +281,9 @@ public class BibSwingApp extends javax.swing.JFrame {
         });
         editMenu.add(addentrymenuitem);
 
-        deleteentrymenuitem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
-        deleteentrymenuitem.setText("Delete selected");
-        editMenu.add(deleteentrymenuitem);
+        removeentrymenuitem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
+        removeentrymenuitem.setText("Remove selected");
+        editMenu.add(removeentrymenuitem);
 
         menuBar.add(editMenu);
 
@@ -352,7 +351,6 @@ public class BibSwingApp extends javax.swing.JFrame {
         public RemoveEntry() {
             super("Remove an entry", null);
             putValue(SHORT_DESCRIPTION, "Removes the selected entries");
-//            putValue(MNEMONIC_KEY, new Integer(KeyEvent.VK_L));
         }
 
         @Override
@@ -713,7 +711,6 @@ public class BibSwingApp extends javax.swing.JFrame {
     private javax.swing.JButton appendbutton;
     private javax.swing.JMenuItem copyMenuItem;
     private javax.swing.JMenuItem cutMenuItem;
-    private javax.swing.JMenuItem deleteentrymenuitem;
     private javax.swing.JMenu editMenu;
     private javax.swing.JTable editedtable;
     private javax.swing.JComboBox entrytype;
@@ -729,6 +726,7 @@ public class BibSwingApp extends javax.swing.JFrame {
     private javax.swing.JScrollPane previewpane;
     private javax.swing.JTextArea previewtext;
     private javax.swing.JButton removebutton;
+    private javax.swing.JMenuItem removeentrymenuitem;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JScrollPane scrollpane;

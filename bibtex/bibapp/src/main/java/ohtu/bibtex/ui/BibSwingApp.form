@@ -115,12 +115,12 @@
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JMenuItem(addentryaction)"/>
               </AuxValues>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="deleteentrymenuitem">
+            <MenuItem class="javax.swing.JMenuItem" name="removeentrymenuitem">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Ctrl+D"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Delete selected"/>
+                <Property name="text" type="java.lang.String" value="Remove selected"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JMenuItem(removeentryaction)"/>
@@ -218,7 +218,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="removebutton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Delete selected"/>
+        <Property name="text" type="java.lang.String" value="Remove selected"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JButton(removeentryaction)"/>
