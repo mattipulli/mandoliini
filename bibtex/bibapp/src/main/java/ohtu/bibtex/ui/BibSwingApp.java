@@ -220,7 +220,7 @@ public class BibSwingApp extends javax.swing.JFrame {
     }//GEN-LAST:event_addbuttonActionPerformed
 
     private void removebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removebuttonActionPerformed
-        if (reftable.getSelectedRow() != -1) {
+        while (reftable.getSelectedRow() != -1) {
             ((DefaultTableModel) reftable.getModel()).removeRow(reftable.getSelectedRow());
         }
     }//GEN-LAST:event_removebuttonActionPerformed
