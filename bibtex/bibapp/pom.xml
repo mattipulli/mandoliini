@@ -33,11 +33,12 @@
             <artifactId>jbibtex</artifactId>
             <version>1.0.11</version>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>unknown.binary</groupId>
             <artifactId>AbsoluteLayout</artifactId>
             <version>SNAPSHOT</version>
         </dependency>
+-->
     </dependencies>
     <build>
         <plugins>
