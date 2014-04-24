@@ -7,13 +7,14 @@
 package ohtu.bibtex.app;
 
 import ohtu.bibtex.IO.IOStub;
+import ohtu.bibtex.ui.ConvertTable;
 import org.jbibtex.BibTeXEntry;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -23,6 +24,7 @@ public class BibCliTest {
     private BibCli cli;
     private BibDatabase clidb;
     private BibUtil cliutil;
+    private ConvertTable convert;
     
     public BibCliTest() {
     }

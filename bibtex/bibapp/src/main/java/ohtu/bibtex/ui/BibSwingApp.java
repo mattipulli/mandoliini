@@ -86,6 +86,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         copyMenuItem = new javax.swing.JMenuItem();
         pasteMenuItem = new javax.swing.JMenuItem();
         deleteMenuItem = new javax.swing.JMenuItem();
+        clearMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         contentsMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
@@ -267,6 +268,14 @@ public class BibSwingApp extends javax.swing.JFrame {
         deleteMenuItem.setMnemonic('d');
         deleteMenuItem.setText("Delete");
         editMenu.add(deleteMenuItem);
+
+        clearMenuItem.setText("Clear");
+        clearMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(clearMenuItem);
 
         menuBar.add(editMenu);
 
@@ -546,6 +555,10 @@ public class BibSwingApp extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_appendbuttonActionPerformed
 
+    private void clearMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearMenuItemActionPerformed
+       previewtext.setText("");
+    }//GEN-LAST:event_clearMenuItemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -667,6 +680,7 @@ public class BibSwingApp extends javax.swing.JFrame {
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JButton addbutton;
     private javax.swing.JButton appendbutton;
+    private javax.swing.JMenuItem clearMenuItem;
     private javax.swing.JMenuItem contentsMenuItem;
     private javax.swing.JMenuItem copyMenuItem;
     private javax.swing.JMenuItem cutMenuItem;
