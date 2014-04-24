@@ -6,6 +6,8 @@
 package ohtu.bibtex.ui;
 
 import java.awt.Component;
+import java.io.File;
+import java.util.regex.Pattern;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -39,7 +41,13 @@ public class BibSwingAppTest {
 
     private ApplicationLauncher app;
     private Robot robot;
+    private JOptionPaneFixture optionFixt;
     private FrameFixture frameFixt;
+    private String testEntry = "@article{KEY01,\n" +
+                                "	author = {Dolan},\n" +
+                                "	title = {Ducks101},\n" +
+                                "	publisher = {Daily Duck}\n" +
+                                "}";
 
     public BibSwingAppTest() {
     }
@@ -58,10 +66,10 @@ public class BibSwingAppTest {
         this.app.start();
 
         this.robot = BasicRobot.robotWithCurrentAwtHierarchy();
-        this.robot.settings().delayBetweenEvents(200);
+        this.robot.settings().delayBetweenEvents(50);
 
-        JOptionPaneFixture optionPaneFix = JOptionPaneFinder.findOptionPane().using(this.robot);
-        optionPaneFix.okButton().click();
+        this.optionFixt = JOptionPaneFinder.findOptionPane().using(this.robot);
+        this.optionFixt.okButton().click();
         
         FrameFinder ff = WindowFinder.findFrame(JFrame.class);  
         this.frameFixt = ff.using(robot);
@@ -116,5 +124,43 @@ public class BibSwingAppTest {
         buttonFixt.click();
         cellFix = tableFix.cell(TableCellByColumnId.row(2).columnId("type"));
         cellFix.requireValue("Manual");
+    }
+    
+    @Test
+    public void editingRowsAndClickingPreviewDisplaysCorrectBibTexFormat() {
+        JButtonFixture addButton = this.frameFixt.button("addEntry");
+        JTableFixture tableFix = this.frameFixt.table("entryTable");
+        addButton.click();
+        this.addTestEntry(tableFix, 1);
+        JButtonFixture previewButton = this.frameFixt.button("previewSelected");
+        previewButton.click();
+        JTextComponentFixture previewFix = this.frameFixt.textBox("previewArea");
+        previewFix.requireText(testEntry);
+    }
+
+    @Test
+    public void addingEntryAndSavingUpdatesStatus() {
+        JButtonFixture buttonFixt = this.frameFixt.button("addEntry");
+        JTableFixture tableFix = this.frameFixt.table("entryTable");
+        buttonFixt.click();
+        addTestEntry(tableFix, 1);
+        JMenuItemFixture saveAsFix = this.frameFixt.menuItem("saveAs");
+        saveAsFix.click();
+        JFileChooserFixture fileChooserFixt = this.frameFixt.fileChooser();
+        fileChooserFixt.fileNameTextBox().enterText("festtest");
+        fileChooserFixt.approve();
+        JLabelFixture statusFix = this.frameFixt.label("status");
+        statusFix.requireText(Pattern.compile(".*Saved.*festtest"));
+    }
+    
+    private void addTestEntry(JTableFixture tableFix, int rowNum){
+        JTableCellFixture cellFix = tableFix.cell(TableCellByColumnId.row(rowNum).columnId("citekey"));
+        cellFix.enterValue("KEY01");
+        cellFix = tableFix.cell(TableCellByColumnId.row(rowNum).columnId("author"));
+        cellFix.enterValue("Dolan");
+        cellFix = tableFix.cell(TableCellByColumnId.row(rowNum).columnId("title"));
+        cellFix.enterValue("Ducks101");
+        cellFix = tableFix.cell(TableCellByColumnId.row(rowNum).columnId("publisher"));
+        cellFix.enterValue("Daily Duck");
     }
 }

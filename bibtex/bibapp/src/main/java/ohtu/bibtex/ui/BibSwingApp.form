@@ -39,6 +39,7 @@
                 <Property name="mnemonic" type="int" value="97"/>
                 <Property name="text" type="java.lang.String" value="Save As ..."/>
                 <Property name="displayedMnemonicIndex" type="int" value="5"/>
+                <Property name="name" type="java.lang.String" value="saveAs" noResource="true"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveAsMenuItemActionPerformed"/>
@@ -281,6 +282,7 @@
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[100, 15]"/>
             </Property>
+            <Property name="name" type="java.lang.String" value="previewArea" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -288,6 +290,7 @@
     <Component class="javax.swing.JButton" name="previewbutton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Preview selected"/>
+        <Property name="name" type="java.lang.String" value="previewSelected" noResource="true"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="previewbuttonActionPerformed"/>
@@ -348,6 +351,7 @@
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[32767, 32767]"/>
         </Property>
+        <Property name="name" type="java.lang.String" value="status" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

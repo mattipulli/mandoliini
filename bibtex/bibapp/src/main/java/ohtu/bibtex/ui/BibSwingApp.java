@@ -159,6 +159,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         previewtext.setColumns(20);
         previewtext.setRows(5);
         previewtext.setMinimumSize(new java.awt.Dimension(100, 15));
+        previewtext.setName("previewArea"); // NOI18N
         previewpane.setViewportView(previewtext);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -169,6 +170,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         getContentPane().add(previewpane, gridBagConstraints);
 
         previewbutton.setText("Preview selected");
+        previewbutton.setName("previewSelected"); // NOI18N
         previewbutton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 previewbuttonActionPerformed(evt);
@@ -211,6 +213,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         getContentPane().add(appendbutton, new java.awt.GridBagConstraints());
 
         statusbar.setMaximumSize(new java.awt.Dimension(32767, 32767));
+        statusbar.setName("status"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -244,6 +247,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         saveAsMenuItem.setMnemonic('a');
         saveAsMenuItem.setText("Save As ...");
         saveAsMenuItem.setDisplayedMnemonicIndex(5);
+        saveAsMenuItem.setName("saveAs"); // NOI18N
         saveAsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveAsMenuItemActionPerformed(evt);
