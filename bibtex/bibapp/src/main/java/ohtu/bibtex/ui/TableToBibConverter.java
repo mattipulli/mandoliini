@@ -96,4 +96,8 @@ public class TableToBibConverter {
         this.database = database;
     }
 
+    public TableModel getModel() {
+        return this.model;
+    }
+
 }
