@@ -104,13 +104,9 @@
                         <format>xml</format>
                     </formats>
                     <instrumentation>
-                        <!--                    <ignores>
-                            <ignore>com.example.boringcode.*</ignore>
-                        </ignores>-->
                         <excludes>
                             <exclude>ohtu/bibtex/IO/**.class</exclude>
                             <exclude>ohtu/bibtex/app/BibApp.class</exclude>
-                            <exclude>ohtu/bibtex/ui/BibSwingApp*.class</exclude>
                         </excludes>
                     </instrumentation>
                 </configuration>             
