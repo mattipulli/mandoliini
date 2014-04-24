@@ -111,6 +111,7 @@ public class BibSwingApp extends javax.swing.JFrame {
             //ConvertTable.bibToTable(new BibDatabase(editedFile.getAbsolutePath()))
             new DefaultTableModel(emptyData, columnNames)
         );
+        editedtable.setName("entryTable"); // NOI18N
         scrollpane.setViewportView(editedtable);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -145,6 +146,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         getContentPane().add(removebutton, gridBagConstraints);
 
         entrytype.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Article", "Book", "Booklet", "Conference", "Inbook", "Incollection", "Inproceedings", "Manual", "Phdthesis", "Proceedings", "Techreport", "Unpublished" }));
+        entrytype.setName("entryTypeSelector"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;

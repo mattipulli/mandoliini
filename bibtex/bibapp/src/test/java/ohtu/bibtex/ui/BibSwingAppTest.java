@@ -10,9 +10,14 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import org.fest.swing.cell.JTableCellReader;
 import org.fest.swing.core.BasicRobot;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.core.Robot;
+import org.fest.swing.data.TableCell;
+import org.fest.swing.data.TableCellByColumnId;
+import org.fest.swing.data.TableCellFinder;
 import org.fest.swing.finder.DialogFinder;
 import org.fest.swing.finder.FrameFinder;
 import org.fest.swing.finder.JOptionPaneFinder;
@@ -66,6 +71,7 @@ public class BibSwingAppTest {
     @After
     public void tearDown() {
         this.frameFixt.cleanUp();
+        this.robot.cleanUp();
     }
 
     @Test
@@ -74,43 +80,42 @@ public class BibSwingAppTest {
         this.frameFixt.button("removeSelectedEntry").requireVisible();
     }
     
-//    @Test
-//    public void addEntryButtonAddsARow() {
-//        this.frameFixt.button("addEntry").click();
-//        this.frameFixt.
-//    }
-
-    // Temporarily commented out, should be implemented with fest (or Xvfb plugin)   
-//    @Test
-//    public void guiAddEntry() {
-//        this.optionPaneFixt.buttonWithText("OK").click();
-//        this.frameFixt.button("addEntry").click();
-//        Component c = this.gui.getScrollpane().getComponent(0);
-//        int before = this.gui.getReftable().getRowCount();
-//        this.gui.getAddbutton().doClick();
-//        int after = this.gui.getReftable().getRowCount();
-//        assertEquals(before + 1, after);
-//
-//    }
-
-//    @Test
-//    public void guiDropEntry() {
-//        this.gui.getAddbutton().doClick();
-//        int before = this.gui.getReftable().getRowCount();
-//        this.gui.getReftable().setRowSelectionInterval(0, 0);
-//        this.gui.getRemovebutton().doClick();
-//        int after = this.gui.getReftable().getRowCount();
-//        assertEquals(before - 1, after);
-//    }
-//    
-//
-//    @Test
-//    public void guiAddDataToEntry() {
-//
-//    }
-//
-//    @Test
-//    public void guiDeleteDataFromEntry() {
-//
-//    }
+    @Test
+    public void addEntryButtonAddsARow() {
+        JButtonFixture buttonFixt = this.frameFixt.button("addEntry");
+        JTableFixture tableFix = this.frameFixt.table("entryTable");
+        tableFix.requireRowCount(1);
+        buttonFixt.click();
+        tableFix.requireRowCount(2);
+        buttonFixt.click();
+        tableFix.requireRowCount(3);
+    }
+    
+    @Test
+    public void removeEntryButtonRemovesSelectedRow() {
+        JButtonFixture addFix = this.frameFixt.button("addEntry");
+        JButtonFixture removeFix = this.frameFixt.button("removeSelectedEntry");
+        JTableFixture tableFix = this.frameFixt.table("entryTable");
+        addFix.click();
+        addFix.click();
+        tableFix.requireRowCount(3);
+        tableFix.selectRows(1);
+        removeFix.click();
+        tableFix.requireRowCount(2);
+    }
+    
+    @Test
+    public void addEntryButtonAddsRowWithCorrectType() {
+        JButtonFixture buttonFixt = this.frameFixt.button("addEntry");
+        JTableFixture tableFix = this.frameFixt.table("entryTable");
+        JComboBoxFixture comboFix = this.frameFixt.comboBox("entryTypeSelector");
+        comboFix.selectItem("Book");
+        buttonFixt.click();
+        JTableCellFixture cellFix = tableFix.cell(TableCellByColumnId.row(1).columnId("type"));
+        cellFix.requireValue("Book");
+        comboFix.selectItem("Manual");
+        buttonFixt.click();
+        cellFix = tableFix.cell(TableCellByColumnId.row(2).columnId("type"));
+        cellFix.requireValue("Manual");
+    }
 }
