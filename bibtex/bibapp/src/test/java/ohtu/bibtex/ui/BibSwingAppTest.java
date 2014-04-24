@@ -39,7 +39,6 @@ public class BibSwingAppTest {
 
     private ApplicationLauncher app;
     private Robot robot;
-    private DialogFixture dialogFixt;
     private FrameFixture frameFixt;
 
     public BibSwingAppTest() {
@@ -59,7 +58,7 @@ public class BibSwingAppTest {
         this.app.start();
 
         this.robot = BasicRobot.robotWithCurrentAwtHierarchy();
-        this.robot.settings().delayBetweenEvents(100);
+        this.robot.settings().delayBetweenEvents(200);
 
         JOptionPaneFixture optionPaneFix = JOptionPaneFinder.findOptionPane().using(this.robot);
         optionPaneFix.okButton().click();
