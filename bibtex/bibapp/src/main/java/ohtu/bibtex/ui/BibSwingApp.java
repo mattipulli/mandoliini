@@ -102,6 +102,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setName("bibapp"); // NOI18N
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         scrollpane.setPreferredSize(new java.awt.Dimension(0, 0));
@@ -126,6 +127,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         getContentPane().add(scrollpane, gridBagConstraints);
 
         addbutton.setText("Add entry");
+        addbutton.setName("addEntry"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -134,6 +136,7 @@ public class BibSwingApp extends javax.swing.JFrame {
         getContentPane().add(addbutton, gridBagConstraints);
 
         removebutton.setText("Remove selected");
+        removebutton.setName("removeSelectedEntry"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -683,6 +686,10 @@ public class BibSwingApp extends javax.swing.JFrame {
 
     public JMenuItem getPasteMenuItem() {
         return pasteMenuItem;
+    }
+    
+    public JScrollPane getPreviewPane(){
+        return this.previewpane;
     }
 
     public JTable getReftable() {

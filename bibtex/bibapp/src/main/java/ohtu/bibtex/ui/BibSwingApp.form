@@ -152,6 +152,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="name" type="java.lang.String" value="bibapp" noResource="true"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="menuBar"/>
@@ -208,6 +209,7 @@
     <Component class="javax.swing.JButton" name="addbutton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Add entry"/>
+        <Property name="name" type="java.lang.String" value="addEntry" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JButton(addentryaction)"/>
@@ -221,6 +223,7 @@
     <Component class="javax.swing.JButton" name="removebutton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Remove selected"/>
+        <Property name="name" type="java.lang.String" value="removeSelectedEntry" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JButton(removeentryaction)"/>
