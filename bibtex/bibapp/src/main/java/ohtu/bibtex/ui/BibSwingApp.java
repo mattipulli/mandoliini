@@ -176,6 +176,11 @@ public class BibSwingApp extends javax.swing.JFrame {
 
         filterfield.setToolTipText("Filter text...");
         filterfield.setMinimumSize(new java.awt.Dimension(250, 24));
+        filterfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterfieldActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -594,6 +599,10 @@ public class BibSwingApp extends javax.swing.JFrame {
     private void addentrymenuitemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addentrymenuitemActionPerformed
 
     }//GEN-LAST:event_addentrymenuitemActionPerformed
+
+    private void filterfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterfieldActionPerformed
+		filterbuttonActionPerformed(evt);
+    }//GEN-LAST:event_filterfieldActionPerformed
 
     /**
      * @param args the command line arguments
