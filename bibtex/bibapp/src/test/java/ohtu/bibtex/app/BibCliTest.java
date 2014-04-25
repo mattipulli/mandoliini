@@ -194,5 +194,71 @@ public class BibCliTest {
         BibDatabase db=this.tabletobib.convertToBibDatabase();
         assertTrue(db.getDatabase().getEntries().size()==2);
     }
+    
+    @Test
+    public void testBibToTableConsturctor(){
+        BibDatabase db=new BibDatabase("");
+        this.bibtotable=new BibToTableConverter(db);
+        assertTrue(this.bibtotable.getBdb() == db.getDatabase());
+    }
+    
+    @Test 
+    public void testBibToTableConversion1(){
+        final String[] columnNames = {"citekey", "type", "author", "title", "publisher", "year",
+            "volume", "series", "address", "edition", "month", "note",
+            "key", "journal", "number", "pages", "booktitle", "editor",
+            "organization"};
+
+        final Object[][] emptyData = new Object[1][19];
+        
+        JTable editedtable=new JTable();
+        editedtable.setModel(
+            new DefaultTableModel(emptyData, columnNames)
+        );
+        DefaultTableModel model = (DefaultTableModel) editedtable.getModel();
+        model.addRow(new Object[]{"Article5", "Article", "Testaaja", "Testi", "r", "1970",
+            "", "", "", "", "", "",
+            "", "", "", "", "", "",
+            ""});
+        
+        this.tabletobib = new TableToBibConverter(model);
+        BibDatabase db=this.tabletobib.convertToBibDatabase();
+        this.bibtotable = new BibToTableConverter(db);
+        DefaultTableModel model2 = this.bibtotable.convertToDefaultTableModel();
+        
+        assertTrue(model2.getColumnName(0).matches("citekey") && model2.getRowCount()==1);
+    }
+    
+     
+    @Test 
+    public void testBibToTableConversion2(){
+        final String[] columnNames = {"citekey", "type", "author", "title", "publisher", "year",
+            "volume", "series", "address", "edition", "month", "note",
+            "key", "journal", "number", "pages", "booktitle", "editor",
+            "organization"};
+
+        final Object[][] emptyData = new Object[1][19];
+        
+        JTable editedtable=new JTable();
+        editedtable.setModel(
+            new DefaultTableModel(emptyData, columnNames)
+        );
+        DefaultTableModel model = (DefaultTableModel) editedtable.getModel();
+        model.addRow(new Object[]{"Article5", "Article", "Testaaja", "Testi", "r", "1970",
+            "", "", "", "", "", "",
+            "", "", "", "", "", "",
+            ""});
+        model.addRow(new Object[]{"Article6", "Article2", "Testaaja", "Testi2", "r", "1970",
+            "", "", "", "", "", "",
+            "", "", "", "", "", "",
+            ""});
+        
+        this.tabletobib = new TableToBibConverter(model);
+        BibDatabase db=this.tabletobib.convertToBibDatabase();
+        this.bibtotable = new BibToTableConverter(db);
+        DefaultTableModel model2 = this.bibtotable.convertToDefaultTableModel();
+        
+        assertTrue(model2.getColumnName(0).matches("citekey") && model2.getRowCount()==2 && model2.getValueAt(0, 0).toString().matches("Article5") && model2.getValueAt(1, 0).toString().matches("Article6") );
+    }
 
 }
